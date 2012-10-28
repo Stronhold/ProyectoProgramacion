@@ -5,6 +5,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import es.deusto.eside.programacion3.luffysurvival.language.Locale;
 import es.deusto.eside.programacion3.luffysurvival.states.GamePlayState;
 import es.deusto.eside.programacion3.luffysurvival.states.GameState;
 import es.deusto.eside.programacion3.luffysurvival.states.MainMenuState;
@@ -36,9 +37,10 @@ public class LuffySurvival extends StateBasedGame {
 	public static void main(String[] args) {
 		try {
 			AppGameContainer app = new AppGameContainer(new LuffySurvival(
-					"Luffy Survival"));
+					Locale.getText("title")));
 
 			app.setDisplayMode(800, 600, false);
+			app.setTargetFrameRate(30);
 			app.start();
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
