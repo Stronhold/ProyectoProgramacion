@@ -9,7 +9,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.tiled.TiledMap;
-
+import org.newdawn.slick.Music;
 
 public class Game extends BasicGame{
 
@@ -79,6 +79,7 @@ public class Game extends BasicGame{
 			//player.addFrame(sheet.getSubImage(184 + frame * 18, 54, 18, 32), 150);
 		}
 		current = playerRight;
+
 	}
 
 	@Override
@@ -140,8 +141,7 @@ public class Game extends BasicGame{
 	}
 
 	public static void main (String [] args) throws SlickException{
-		AppGameContainer container = 
-				new AppGameContainer(new Game(), 640, 480, false);
+		AppGameContainer container = 	new AppGameContainer(new Game(), 640, 480, false);
 			container.start();
 	}
 
