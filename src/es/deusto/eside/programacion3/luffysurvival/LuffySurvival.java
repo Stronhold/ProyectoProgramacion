@@ -9,29 +9,25 @@ import es.deusto.eside.programacion3.luffysurvival.language.Locale;
 import es.deusto.eside.programacion3.luffysurvival.states.GamePlayState;
 import es.deusto.eside.programacion3.luffysurvival.states.GameState;
 import es.deusto.eside.programacion3.luffysurvival.states.MainMenuState;
+import es.deusto.eside.programacion3.luffysurvival.states.OpeningState;
 import es.deusto.eside.programacion3.luffysurvival.states.OptionState;
 
 public class LuffySurvival extends StateBasedGame {
+	
+	public static final int WIDTH = 640;
+	public static final int HEIGHT = 480;
 
 	public LuffySurvival(String name) {
-		super(name);
-
-		this.addState(new MainMenuState(GameState.MAIN_MENU_STATE.ordinal()));
-		this.addState(new GamePlayState(GameState.GAME_PLAY_STATE.ordinal()));
-		this.addState(new OptionState(GameState.OPTIONS_STATE.ordinal()));
-		this.enterState(GameState.MAIN_MENU_STATE.ordinal());
+		super(name);	
 	}
 
 	@Override
 	public void initStatesList(GameContainer gameContainer)
 			throws SlickException {
-		this.getState(GameState.GAME_PLAY_STATE.ordinal()).init(gameContainer,
-				this);
-		this.getState(GameState.MAIN_MENU_STATE.ordinal()).init(gameContainer,
-				this);
-		this.getState(GameState.OPTIONS_STATE.ordinal()).init(gameContainer,
-				this);
-
+		this.addState(new OpeningState(GameState.OPENING_STATE.ordinal()));
+		this.addState(new MainMenuState(GameState.MAIN_MENU_STATE.ordinal()));
+		this.addState(new GamePlayState(GameState.GAME_PLAY_STATE.ordinal()));
+		this.addState(new OptionState(GameState.OPTIONS_STATE.ordinal()));
 	}
 
 	public static void main(String[] args) {
@@ -39,14 +35,13 @@ public class LuffySurvival extends StateBasedGame {
 			AppGameContainer app = new AppGameContainer(new LuffySurvival(
 					Locale.getText("title")));
 
-			app.setDisplayMode(800, 600, false);
-			app.setTargetFrameRate(30);
+			app.setDisplayMode(WIDTH, HEIGHT, false);
+			app.setShowFPS(false);
+			app.setVSync(true);
 			app.start();
 		} catch (SlickException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 }
