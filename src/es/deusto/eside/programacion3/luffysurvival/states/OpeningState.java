@@ -49,7 +49,7 @@ import es.deusto.eside.programacion3.luffysurvival.util.PlatformUtils;
 
 public class OpeningState extends BasicGameState implements RenderCallback {
 
-	private static final String VIDEO_FILE = "resources/video/intro/intro.mp4";
+	private static final String VIDEO_FILE = "resources/video/intro/chV6DSBeI7k.mp4";
 
 	private MediaPlayerFactory mediaPlayerFactory;
 	private DirectMediaPlayer mediaPlayer;
@@ -60,11 +60,9 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 
 	private final Logger logger = LoggerFactory.getLogger(OpeningState.class);
 
-	 
 	public OpeningState(int id) {
 		this.stateId = id;
 	}
-
 
 	@Override
 	public void init(final GameContainer container, final StateBasedGame sb)
@@ -74,14 +72,20 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 		Input i = container.getInput();
 
 		i.addKeyListener(initKeyListener(sb));
-
 		i.addMouseListener(initMouserListener(sb));
-		
 		mediaPlayer.addMediaPlayerEventListener(initVideoListener(sb));
 
 	}
 
-	
+	@Override
+	public void leave(final GameContainer container, final StateBasedGame sb) {
+		Input i = container.getInput();
+
+		i.removeAllKeyListeners();
+		i.removeAllMouseListeners();
+		stopVideo();
+	}
+
 	private void initVideoRequirements() {
 		System.setProperty("jna.library.path", "vlib");
 		if (PlatformUtils.isMac())
@@ -129,7 +133,7 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 			}
 			glEnd();
 
-		}	
+		}
 
 	}
 
@@ -204,6 +208,15 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 		};
 	}
 
+	private void stopVideo() {
+
+		mediaPlayer.stop();
+		mediaPlayer.release();
+		mediaPlayerFactory.release();
+		mediaPlayerFactory = null;
+		mediaPlayer = null;
+	}
+
 	private KeyListener initKeyListener(final StateBasedGame sb) {
 		KeyListener kl = new KeyListener() {
 			@Override
@@ -236,138 +249,133 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 
 		return kl;
 	}
-	
-	
+
 	private MediaPlayerEventListener initVideoListener(final StateBasedGame sb) {
 		return new MediaPlayerEventListener() {
-			
+
 			@Override
 			public void videoOutput(MediaPlayer arg0, int arg1) {
-				
+
 			}
-			
+
 			@Override
-			public void titleChanged(MediaPlayer arg0, int arg1) {				
+			public void titleChanged(MediaPlayer arg0, int arg1) {
 			}
-			
+
 			@Override
-			public void timeChanged(MediaPlayer arg0, long arg1) {				
+			public void timeChanged(MediaPlayer arg0, long arg1) {
 			}
-			
+
 			@Override
 			public void subItemPlayed(MediaPlayer arg0, int arg1) {
-				
+
 			}
-			
+
 			@Override
 			public void subItemFinished(MediaPlayer arg0, int arg1) {
-				
+
 			}
-			
+
 			@Override
-			public void stopped(MediaPlayer arg0) {				
+			public void stopped(MediaPlayer arg0) {
 			}
-			
+
 			@Override
 			public void snapshotTaken(MediaPlayer arg0, String arg1) {
-				
+
 			}
-			
+
 			@Override
-			public void seekableChanged(MediaPlayer arg0, int arg1) {				
+			public void seekableChanged(MediaPlayer arg0, int arg1) {
 			}
-			
+
 			@Override
-			public void positionChanged(MediaPlayer arg0, float arg1) {				
+			public void positionChanged(MediaPlayer arg0, float arg1) {
 			}
-			
+
 			@Override
-			public void playing(MediaPlayer arg0) {				
+			public void playing(MediaPlayer arg0) {
 			}
-			
+
 			@Override
-			public void paused(MediaPlayer arg0) {				
+			public void paused(MediaPlayer arg0) {
 			}
-			
+
 			@Override
 			public void pausableChanged(MediaPlayer arg0, int arg1) {
 			}
-			
+
 			@Override
-			public void opening(MediaPlayer arg0) {				
+			public void opening(MediaPlayer arg0) {
 			}
-			
+
 			@Override
-			public void newMedia(MediaPlayer arg0) {				
+			public void newMedia(MediaPlayer arg0) {
 			}
-			
+
 			@Override
-			public void mediaSubItemAdded(MediaPlayer arg0, libvlc_media_t arg1) {				
+			public void mediaSubItemAdded(MediaPlayer arg0, libvlc_media_t arg1) {
 			}
-			
+
 			@Override
-			public void mediaStateChanged(MediaPlayer arg0, int arg1) {				
+			public void mediaStateChanged(MediaPlayer arg0, int arg1) {
 			}
-			
+
 			@Override
 			public void mediaParsedChanged(MediaPlayer arg0, int arg1) {
-				
+
 			}
-			
+
 			@Override
 			public void mediaMetaChanged(MediaPlayer arg0, int arg1) {
-				
+
 			}
-			
+
 			@Override
 			public void mediaFreed(MediaPlayer arg0) {
-				
+
 			}
-			
+
 			@Override
 			public void mediaDurationChanged(MediaPlayer arg0, long arg1) {
-				
+
 			}
-			
+
 			@Override
-			public void mediaChanged(MediaPlayer arg0, libvlc_media_t arg1, String arg2) {
-				
+			public void mediaChanged(MediaPlayer arg0, libvlc_media_t arg1,
+					String arg2) {
+
 			}
-			
+
 			@Override
 			public void lengthChanged(MediaPlayer arg0, long arg1) {
-				
+
 			}
-			
+
 			@Override
-			public void forward(MediaPlayer arg0) {				
+			public void forward(MediaPlayer arg0) {
 			}
-			
+
 			@Override
 			public void finished(MediaPlayer arg0) {
 				sb.enterState(GameState.MAIN_MENU_STATE.ordinal());
-				mediaPlayer.stop();
-		  	  	mediaPlayer.release();
-		  	  	mediaPlayerFactory.release();
-		  	  	mediaPlayerFactory = null;
-		  	  	mediaPlayer = null;
 			}
-			
+
 			@Override
-			public void error(MediaPlayer arg0) {				
+			public void error(MediaPlayer arg0) {
 			}
-			
+
 			@Override
-			public void endOfSubItems(MediaPlayer arg0) {				
+			public void endOfSubItems(MediaPlayer arg0) {
 			}
-			
+
 			@Override
-			public void buffering(MediaPlayer arg0, float arg1) {				
+			public void buffering(MediaPlayer arg0, float arg1) {
 			}
-			
+
 			@Override
 			public void backward(MediaPlayer arg0) {
-				
+
 			}
 		};
 	}
