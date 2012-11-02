@@ -21,7 +21,6 @@ import static org.lwjgl.opengl.GL11.glTexSubImage2D;
 import static org.lwjgl.opengl.GL11.glVertex2f;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 
-import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
 import org.newdawn.slick.GameContainer;
@@ -32,6 +31,8 @@ import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -188,7 +189,7 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 
 			@Override
 			public void mousePressed(int arg0, int arg1, int arg2) {
-				sb.enterState(GameState.MAIN_MENU_STATE.ordinal());
+				sb.enterState(GameState.MAIN_MENU_STATE.ordinal(),  new FadeOutTransition(), new FadeInTransition());
 			}
 
 			@Override
@@ -234,7 +235,7 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 
 			@Override
 			public void keyPressed(int arg0, char arg1) {
-				sb.enterState(GameState.MAIN_MENU_STATE.ordinal());
+				sb.enterState(GameState.MAIN_MENU_STATE.ordinal(),  new FadeOutTransition(), new FadeInTransition());
 			}
 
 			@Override
@@ -358,7 +359,7 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 
 			@Override
 			public void finished(MediaPlayer arg0) {
-				sb.enterState(GameState.MAIN_MENU_STATE.ordinal());
+				sb.enterState(GameState.MAIN_MENU_STATE.ordinal(),  new FadeOutTransition(), new FadeInTransition());
 			}
 
 			@Override
