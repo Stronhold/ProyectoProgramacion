@@ -9,6 +9,7 @@ import es.deusto.eside.programacion3.luffysurvival.language.Locale;
 import es.deusto.eside.programacion3.luffysurvival.states.GamePlayState;
 import es.deusto.eside.programacion3.luffysurvival.states.GameState;
 import es.deusto.eside.programacion3.luffysurvival.states.MainMenuState;
+import es.deusto.eside.programacion3.luffysurvival.states.PreMainMenuState;
 import es.deusto.eside.programacion3.luffysurvival.states.OpeningState;
 import es.deusto.eside.programacion3.luffysurvival.states.OptionState;
 
@@ -25,9 +26,10 @@ public class LuffySurvival extends StateBasedGame {
 	public void initStatesList(GameContainer gameContainer)
 			throws SlickException {
 		this.addState(new OpeningState(GameState.OPENING_STATE.ordinal()));
+		this.addState(new PreMainMenuState(GameState.PREMAIN_MENU_STATE.ordinal()));
 		this.addState(new MainMenuState(GameState.MAIN_MENU_STATE.ordinal()));
 		this.addState(new GamePlayState(GameState.GAME_PLAY_STATE.ordinal()));
-		this.addState(new OptionState(GameState.OPTIONS_STATE.ordinal()));
+		this.addState(new OptionState(GameState.OPTIONS_STATE.ordinal()));		
 	}
 
 	public static void main(String[] args) {

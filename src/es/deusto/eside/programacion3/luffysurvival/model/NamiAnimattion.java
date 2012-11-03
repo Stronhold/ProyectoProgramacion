@@ -28,7 +28,7 @@ public class NamiAnimattion {
 		try {
 			this.initStandAnimation();
 			this.initHitAnimation();
-			//initFinalAnimation();
+			this.initFinalAnimation();
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
@@ -58,17 +58,17 @@ public class NamiAnimattion {
 			this.attack.addFrame(nami.getSprite(frame, 0), 150);
 		}
 	}
-	/*public void initFinalAnimation() throws SlickException {
+	public void initFinalAnimation() throws SlickException {
 		this.superAtack = new Animation();
 
 		SpriteSheet nami = new SpriteSheet(
-				"resources/sprites/LuffyFinalAttack.png", 180, 90);
+				"resources/sprites/namiFinalAttack.png", 135, 90);
 		this.superAtack = new Animation();
 		this.superAtack.setAutoUpdate(true);
-		for (int frame = 0; frame < 22; frame++) {
+		for (int frame = 0; frame < 14; frame++) {
 			this.superAtack.addFrame(nami.getSprite(frame, 0), 150);
 		}
-	}*/
+	}
 
 
 	public Animation getSuperAtack() {

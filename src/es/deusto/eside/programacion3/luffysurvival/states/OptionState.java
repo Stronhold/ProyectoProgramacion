@@ -6,7 +6,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import TWLSlick.BasicTWLGameState;
 
 public class OptionState extends BasicGameState {
 

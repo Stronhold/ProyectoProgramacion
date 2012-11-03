@@ -23,6 +23,7 @@ import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 
 import java.nio.ByteBuffer;
 
+import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -58,6 +59,9 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 
 	private int texture;
 	private int stateId;
+	
+	private MouseListener mouseListener;
+	private KeyListener keyListener;
 
 	private final Logger logger = LoggerFactory.getLogger(OpeningState.class);
 
@@ -66,15 +70,21 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 	}
 
 	@Override
+	public void enter (final GameContainer container, final StateBasedGame sb) {
+		Input i = container.getInput();
+
+		keyListener = initKeyListener(sb);
+		i.addKeyListener(keyListener);
+		mouseListener = initMouserListener(sb);
+		i.addMouseListener(mouseListener);
+		mediaPlayer.addMediaPlayerEventListener(initVideoListener(sb));
+	}
+	
+	@Override
 	public void init(final GameContainer container, final StateBasedGame sb)
 			throws SlickException {
 		initVideoRequirements();
-
-		Input i = container.getInput();
-
-		i.addKeyListener(initKeyListener(sb));
-		i.addMouseListener(initMouserListener(sb));
-		mediaPlayer.addMediaPlayerEventListener(initVideoListener(sb));
+		
 
 	}
 
@@ -82,12 +92,14 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 	public void leave(final GameContainer container, final StateBasedGame sb) {
 		Input i = container.getInput();
 
-		i.removeAllKeyListeners();
-		i.removeAllMouseListeners();
+		i.removeKeyListener(keyListener);
+		i.removeMouseListener(mouseListener);
 		stopVideo();
 	}
 
 	private void initVideoRequirements() {
+		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+
 		System.setProperty("jna.library.path", "vlib");
 		if (PlatformUtils.isMac())
 			mediaPlayerFactory = new MediaPlayerFactory(new String[] {
@@ -109,6 +121,7 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, LuffySurvival.WIDTH,
 				LuffySurvival.HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE,
 				(ByteBuffer) null);
+
 	}
 
 	@Override
@@ -141,7 +154,6 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 	@Override
 	public void update(GameContainer container, StateBasedGame arg1, int arg2)
 			throws SlickException {
-
 	}
 
 	@Override
@@ -184,12 +196,11 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 
 			@Override
 			public void mouseReleased(int arg0, int arg1, int arg2) {
-
+				sb.enterState(GameState.PREMAIN_MENU_STATE.ordinal(),  new FadeOutTransition(), new FadeInTransition());
 			}
 
 			@Override
 			public void mousePressed(int arg0, int arg1, int arg2) {
-				sb.enterState(GameState.MAIN_MENU_STATE.ordinal(),  new FadeOutTransition(), new FadeInTransition());
 			}
 
 			@Override
@@ -235,11 +246,12 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 
 			@Override
 			public void keyPressed(int arg0, char arg1) {
-				sb.enterState(GameState.MAIN_MENU_STATE.ordinal(),  new FadeOutTransition(), new FadeInTransition());
 			}
 
 			@Override
 			public void keyReleased(int arg0, char arg1) {
+				sb.enterState(GameState.PREMAIN_MENU_STATE.ordinal(),  new FadeOutTransition(), new FadeInTransition());
+
 			}
 
 			@Override
@@ -359,7 +371,7 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 
 			@Override
 			public void finished(MediaPlayer arg0) {
-				sb.enterState(GameState.MAIN_MENU_STATE.ordinal(),  new FadeOutTransition(), new FadeInTransition());
+				sb.enterState(GameState.PREMAIN_MENU_STATE.ordinal(),  new FadeOutTransition(), new FadeInTransition());
 			}
 
 			@Override
