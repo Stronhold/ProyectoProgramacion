@@ -51,7 +51,7 @@ import es.deusto.eside.programacion3.luffysurvival.util.PlatformUtils;
 
 public class OpeningState extends BasicGameState implements RenderCallback {
 
-	private static final String VIDEO_FILE = "resources/video/intro/chV6DSBeI7k.mp4";
+	private static final String VIDEO_FILE = "resources/video/intro/intro.mp4";
 
 	private MediaPlayerFactory mediaPlayerFactory;
 	private DirectMediaPlayer mediaPlayer;
@@ -62,6 +62,8 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 	
 	private MouseListener mouseListener;
 	private KeyListener keyListener;
+	
+	private boolean isFirstTime;
 
 	private final Logger logger = LoggerFactory.getLogger(OpeningState.class);
 
@@ -71,21 +73,31 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 
 	@Override
 	public void enter (final GameContainer container, final StateBasedGame sb) {
+		if (this.isFirstTime) {
+			GL11.glPopAttrib();
+
+		} 
+		else {
+			texture = glGenTextures();
+			glBindTexture(GL_TEXTURE_2D, texture);
+		}
 		Input i = container.getInput();
 
 		keyListener = initKeyListener(sb);
 		i.addKeyListener(keyListener);
 		mouseListener = initMouserListener(sb);
 		i.addMouseListener(mouseListener);
-		mediaPlayer.addMediaPlayerEventListener(initVideoListener(sb));
+		mediaPlayer.playMedia(VIDEO_FILE);
+
 	}
 	
 	@Override
 	public void init(final GameContainer container, final StateBasedGame sb)
 			throws SlickException {
 		initVideoRequirements();
-		
+		mediaPlayer.addMediaPlayerEventListener(initVideoListener(sb));
 
+		this.isFirstTime = true;
 	}
 
 	@Override
@@ -94,7 +106,12 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 
 		i.removeKeyListener(keyListener);
 		i.removeMouseListener(mouseListener);
+		
 		stopVideo();
+		if (this.isFirstTime) {
+			this.isFirstTime = false;
+		}
+		
 	}
 
 	private void initVideoRequirements() {
@@ -111,7 +128,6 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 		mediaPlayer = mediaPlayerFactory.newDirectMediaPlayer("RGBA",
 				LuffySurvival.WIDTH, LuffySurvival.HEIGHT,
 				LuffySurvival.WIDTH * 4, this);
-		mediaPlayer.playMedia(VIDEO_FILE);
 		texture = glGenTextures();
 		glBindTexture(GL_TEXTURE_2D, texture);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -127,10 +143,12 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
 			throws SlickException {
+		
 		glBindTexture(GL_TEXTURE_2D, texture);
 		if (buffer != null) {
 			glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, LuffySurvival.WIDTH,
 					LuffySurvival.HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+		}
 			glBegin(GL_QUADS);
 			{
 				glTexCoord2f(0, 0);
@@ -146,8 +164,7 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 				glVertex2f(0, LuffySurvival.HEIGHT);
 			}
 			glEnd();
-
-		}
+		
 
 	}
 
@@ -165,6 +182,7 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 	public void display(Memory memory) {
 		buffer = memory.getByteBuffer(0, LuffySurvival.WIDTH
 				* LuffySurvival.HEIGHT * 4);
+		logger.error("fa");
 	}
 
 	private MouseListener initMouserListener(final StateBasedGame sb) {
@@ -223,10 +241,10 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 	private void stopVideo() {
 
 		mediaPlayer.stop();
-		mediaPlayer.release();
-		mediaPlayerFactory.release();
-		mediaPlayerFactory = null;
-		mediaPlayer = null;
+		//mediaPlayer.release();
+		//mediaPlayerFactory.release();
+		//mediaPlayerFactory = null;
+		//mediaPlayer = null;
 	}
 
 	private KeyListener initKeyListener(final StateBasedGame sb) {
@@ -372,6 +390,7 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 			@Override
 			public void finished(MediaPlayer arg0) {
 				sb.enterState(GameState.PREMAIN_MENU_STATE.ordinal(),  new FadeOutTransition(), new FadeInTransition());
+				
 			}
 
 			@Override

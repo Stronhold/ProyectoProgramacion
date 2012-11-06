@@ -2,11 +2,14 @@ package es.deusto.eside.programacion3.luffysurvival.language;
 
 import java.util.ResourceBundle;
 
-public class Locale {
+public enum Locale {
+	INSTANCE;
+	private  final String MESSAGES = "es.deusto.eside.programacion3.luffysurvival.language.messages";
 	
-	private static final String MESSAGES = "es.deusto.eside.programacion3.luffysurvival.language.messages";
-	public static String getText(final String id) {
-		return ResourceBundle.getBundle(MESSAGES).getString(id);
+	private ResourceBundle MESSAGE_BUNDLE = ResourceBundle.getBundle(MESSAGES);
+	
+	public  String getText(final String id) {
+		return MESSAGE_BUNDLE.getString(id);
 	}
 
 }

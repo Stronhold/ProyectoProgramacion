@@ -24,5 +24,6 @@
 	<classpathentry kind="lib" path="/home/sergio/workspace/Programacion3/lib/twl/TWL.jar"/>
 	<classpathentry kind="lib" path="/home/sergio/workspace/Programacion3/lib/twl/TWLEffects.jar"/>
 	<classpathentry kind="lib" path="/home/sergio/workspace/Programacion3/lib/twl/xpp3-1.1.4c.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

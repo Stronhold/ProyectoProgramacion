@@ -26,6 +26,7 @@ public class PreMainMenuState extends BasicGameState {
 
 	private static final int DURATION = 4000;
 	private static final int SKY_DURATION = 200;
+	private static final int WAITING_TIME = 200;
 
 	private static final String fontPath = "resources/fonts/OnePiece.ttf";
 
@@ -40,6 +41,8 @@ public class PreMainMenuState extends BasicGameState {
 	private Animation sky;
 
 	private UnicodeFont fpsFont;
+	
+	private int timeWaiting;
 
 	private final Logger logger = LoggerFactory.getLogger(OpeningState.class);
 
@@ -51,6 +54,7 @@ public class PreMainMenuState extends BasicGameState {
 		i.addKeyListener(keyListener);
 		mouseListener = initMouserListener(sb);
 		i.addMouseListener(mouseListener);
+		timeWaiting = 0;
 	}
 
 	@Override
@@ -96,7 +100,6 @@ public class PreMainMenuState extends BasicGameState {
 			e.printStackTrace();
 		}
 
-		GL11.glPopAttrib();
 
 	}
 
@@ -129,13 +132,17 @@ public class PreMainMenuState extends BasicGameState {
 		this.mainCharacters.draw(LuffySurvival.WIDTH
 				- this.mainCharacters.getCurrentFrame().getWidth(), 0);
 
-		fpsFont.drawString(280.0F, 300.0F, "LØL", Color.red);
+		fpsFont.drawString(140.0F, 300.0F, "Pulse una tecla para continuar", Color.yellow);
 	}
 
 	@Override
 	public void update(GameContainer gameContainer, StateBasedGame sb, int delta)
 			throws SlickException {
 		sky.update(delta);
+		timeWaiting += delta;
+		//if (timeWaiting > WAITING_TIME) {
+			//sb.enterState(GameState.OPENING_STATE.ordinal(), new FadeOutTransition(), new FadeInTransition());
+		//}
 	}
 
 	@Override

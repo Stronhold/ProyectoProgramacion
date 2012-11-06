@@ -29,13 +29,14 @@ public class LuffySurvival extends StateBasedGame {
 		this.addState(new PreMainMenuState(GameState.PREMAIN_MENU_STATE.ordinal()));
 		this.addState(new MainMenuState(GameState.MAIN_MENU_STATE.ordinal()));
 		this.addState(new GamePlayState(GameState.GAME_PLAY_STATE.ordinal()));
+		this.addState(new GamePlayState(GameState.CREDIT_STATE.ordinal()));
 		this.addState(new OptionState(GameState.OPTIONS_STATE.ordinal()));		
 	}
 
 	public static void main(String[] args) {
 		try {
 			AppGameContainer app = new AppGameContainer(new LuffySurvival(
-					Locale.getText("title")));
+					Locale.INSTANCE.getText("title")));
 
 			app.setDisplayMode(WIDTH, HEIGHT, false);
 			app.setShowFPS(false);
