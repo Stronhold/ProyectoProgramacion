@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="40" height="30" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="Grass Block" tilewidth="16" tileheight="16">
+  <image source="Grass Block.png" width="101" height="171"/>
+ </tileset>
+ <tileset firstgid="61" name="Wood Block" tilewidth="16" tileheight="16">
+  <image source="Wood Block.png" width="101" height="171"/>
+ </tileset>
+ <tileset firstgid="121" name="Water Block" tilewidth="16" tileheight="16">
+  <image source="Water Block.png" width="101" height="171"/>
+ </tileset>
+ <tileset firstgid="181" name="sea" tilewidth="16" tileheight="16">
+  <image source="sea.png" width="16" height="16"/>
+ </tileset>
+ <layer name="Mar" width="40" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+3P2wqCQBRG4Xl/Tc0SswI7aPWYrQGFje0LUcib/4MF454ZGEOQNRJKaUcZ5VQ4s8w584/Znko60NGsq8k6OtPFfJfOzDu3ZlbTiRqz15j3VsOZdphb05m9P/Luzp1FT+qopxe96RN+2fdfnf3xfVuJ/3ajOz02fIeIiIiIiIjIEl8g/t6QwBIAAA==
+  </data>
+ </layer>
+ <layer name="Muros" width="40" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+2QSQ6DMBAE+R65QMILIDtLAll5PnWIJWuEIg6RnUOXVJK7Zw7WJIkQ8UhxFfsTX8gw/7jGzcJ38ePs3nanxAq3uMM9Hv4oH/GEZ6yxwTZQdp0/s/sdXvCKPQ54C5Rd58/s/h0f+MQXvnEMlF3nz+x+zPvNZdvHvN9ctr0QQgghhBBiORP0iAa6wBIAAA==
+  </data>
+ </layer>
+ <layer name="Hierba" width="40" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+2VaU4DMQyF5wKUrey0DFDK0gJlKVs5KffgfjyksXgyz0mmP/jDRPrk2HEyjuNkqqpr/7V9Bn3T/8JW0nycfi3TPwr9lrF1rWtd+91WQA+sgjWS62DD9XtiPKWrMQX7e9sm6IMtsE1yB+y6fl+Mp3Q1pmB/b9sD++AAHJIcgGEzlsL7s67GFOzvbUegBsfgBJyCUWNrg487WpNtJT5nYAzOwQW4BFeNrQ0+3mhNtpX4TMAUXIMbcAtmja0NPt5oTbaV+Pj6Gwh92OytTR0qGzMOfHx8qv68Pqp+asoTxaHWYNQctZbKn6qLWpxhFNsoWIPxOY3ulMqfqgurKSP37qg1GN6L3Vu1p+j++txM3TfrDLm7YnFZPiM/db5R/fD83Hvj77f/rsU1S+T7O47ofc7ltOTNUTlTZ6O+b7L0fKOc+neD4fvq85W7jyYnQSzKVrqPnM5zorM1mfr/purP5iu/nM5zon7ufJUtene8X07nOVGfz7fkP9jGltN5TtQ33ztwDx7AI8k5eEropX7zJX1NPoMX8AreSC7Ae0Iv9Vss6WvyCzifp5zAEgAA
+  </data>
+ </layer>
+</map>
