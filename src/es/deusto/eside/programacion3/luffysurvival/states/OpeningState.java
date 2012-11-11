@@ -49,24 +49,66 @@ import uk.co.caprica.vlcj.player.direct.RenderCallback;
 import es.deusto.eside.programacion3.luffysurvival.LuffySurvival;
 import es.deusto.eside.programacion3.luffysurvival.util.PlatformUtils;
 
+/**
+ * Video introductorio
+ * @author sergio
+ *
+ */
 public class OpeningState extends BasicGameState implements RenderCallback {
 
-	private static final String VIDEO_FILE = "resources/video/intro/intro.mp4";
 
+	/**
+	 * VIDEO_FILE: dirección del video
+	 */
+	private static final String VIDEO_FILE = "resources/video/intro/intro.mp4";
+	
+	/**
+	 * mediaPlayerFactory: da acceso al VLC
+	 */
 	private MediaPlayerFactory mediaPlayerFactory;
+	/**
+	 * mediaPlayer: controla el video
+	 */
 	private DirectMediaPlayer mediaPlayer;
+	/**
+	 *  buffer: buffer de los frames del video
+	 */
 	private ByteBuffer buffer;
 
+	/**
+	 * identificador de la textura en la que se renderizará el video
+	 */
 	private int texture;
+
+	/**
+	 * stateID: estado del programa
+	 */
 	private int stateId;
-	
+
+	/**
+	 * mouseListener: listener del ratón
+	 */
 	private MouseListener mouseListener;
+	/**
+	 * keyListener: listener del teclado
+	 */
 	private KeyListener keyListener;
-	
+
+	/**
+	 * isFirstTime: indica si es la primera vez que se abre
+	 */
 	private boolean isFirstTime;
-
+	
+	/**
+	 * logger: variable para logear. 
+	 */
 	private final Logger logger = LoggerFactory.getLogger(OpeningState.class);
+	
 
+	/**
+	 * Constructor por defecto
+	 * @param id: indica número de estado
+	 */
 	public OpeningState(int id) {
 		this.stateId = id;
 	}
@@ -113,7 +155,9 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 		}
 		
 	}
-
+	/**
+	 * Inicializa el video
+	 */
 	private void initVideoRequirements() {
 		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 
@@ -238,6 +282,9 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 		};
 	}
 
+	/**
+	 * Para el video
+	 */
 	private void stopVideo() {
 
 		mediaPlayer.stop();

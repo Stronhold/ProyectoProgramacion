@@ -13,11 +13,26 @@ import es.deusto.eside.programacion3.luffysurvival.states.PreMainMenuState;
 import es.deusto.eside.programacion3.luffysurvival.states.OpeningState;
 import es.deusto.eside.programacion3.luffysurvival.states.OptionState;
 
+/**
+ * Clase principal del juego
+ * @author sergio
+ *
+ */
 public class LuffySurvival extends StateBasedGame {
 	
+	/**
+	 * WIDTH: ancho de la venta
+	 */
 	public static final int WIDTH = 640;
+	/**
+	 * HEIGHT: alto de la ventana
+	 */
 	public static final int HEIGHT = 480;
 
+	/**
+	 * constructor del juego 
+	 * @param name: nombre del juego
+	 */
 	public LuffySurvival(String name) {
 		super(name);	
 	}
@@ -32,7 +47,10 @@ public class LuffySurvival extends StateBasedGame {
 		this.addState(new GamePlayState(GameState.CREDIT_STATE.ordinal()));
 		this.addState(new OptionState(GameState.OPTIONS_STATE.ordinal()));		
 	}
-
+/**
+ * Método principal del juego
+ * @param args: argumentos del programa
+ */
 	public static void main(String[] args) {
 		try {
 			AppGameContainer app = new AppGameContainer(new LuffySurvival(

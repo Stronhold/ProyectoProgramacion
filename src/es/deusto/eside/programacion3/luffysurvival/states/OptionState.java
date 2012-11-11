@@ -5,12 +5,23 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-
+/**
+ * Parte del menú desde la que se controlarán las opciones del juego
+ * @author sergio
+ *
+ */
 
 public class OptionState extends BasicGameState {
 
+	/**
+	 * stateId: indica el estado del programa
+	 */
 	private int stateId;
 
+	/**
+	 * Constructor
+	 * @param ordinal: número de estado del programa 
+	 */
 	public OptionState(int ordinal) {
 		this.stateId = ordinal;	
 	}

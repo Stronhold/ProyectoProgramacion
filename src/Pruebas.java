@@ -8,10 +8,19 @@ import org.newdawn.slick.SlickException;
 import es.deusto.eside.programacion3.luffysurvival.model.LuffyAnimation;
 import es.deusto.eside.programacion3.luffysurvival.model.MarineAnimation;
 import es.deusto.eside.programacion3.luffysurvival.model.NamiAnimattion;
-
+/**
+ * Programa de prueba de animaciones de los personajes
+ * @author sergio
+ *
+ */
 
 public class Pruebas extends BasicGame {
 
+	/*
+	 * luffyAnimation: animación de luffy
+	 * namiAnimattion: animación de Nami
+	 * marineAnimation: animación del marine
+	 */
 	private LuffyAnimation luffyAnimation;
 	private NamiAnimattion namiAnimattion;
 	private MarineAnimation marineAnimation;
@@ -22,7 +31,11 @@ public class Pruebas extends BasicGame {
 	public Pruebas(){
 		super("Prueba");
 	}
-
+/**
+ * Prueba las animaciones en pantalla
+ * @param args: argumentos del programa
+ * @throws SlickException: excepción lanzada por la librería de slick
+ */
 	public static void main(String[] args) throws SlickException {
 		// TODO Auto-generated method stub
 		AppGameContainer container = 	new AppGameContainer(new Pruebas(), 640, 480, false);

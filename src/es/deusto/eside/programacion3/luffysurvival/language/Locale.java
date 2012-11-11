@@ -1,6 +1,9 @@
 package es.deusto.eside.programacion3.luffysurvival.language;
 
 import java.util.ResourceBundle;
+/*
+ * Se encarga de la traducción del juego
+ */
 
 public enum Locale {
 	INSTANCE;

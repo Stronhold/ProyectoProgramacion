@@ -1,5 +1,10 @@
 package es.deusto.eside.programacion3.luffysurvival.states;
 
+/**
+ * Enumeración de los estados del juego
+ * @author sergio
+ *
+ */
 public enum GameState {
 	OPENING_STATE,
 	PREMAIN_MENU_STATE,

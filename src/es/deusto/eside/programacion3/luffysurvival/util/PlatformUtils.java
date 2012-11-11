@@ -1,5 +1,9 @@
 package es.deusto.eside.programacion3.luffysurvival.util;
-
+/**
+ * Indica el SO
+ * @author sergio
+ *
+ */
 public class PlatformUtils {
 	
 	static public boolean isMac() {

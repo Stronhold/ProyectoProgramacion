@@ -22,29 +22,76 @@ import org.slf4j.LoggerFactory;
 import es.deusto.eside.programacion3.luffysurvival.LuffySurvival;
 import es.deusto.eside.programacion3.luffysurvival.engine.FadeOutAnimation;
 
+/**
+ * Pre-menú del juego
+ * @author sergio
+ *
+ */
 public class PreMainMenuState extends BasicGameState {
 
+	/**
+	 * DURATION: milisegundos
+	 */
 	private static final int DURATION = 4000;
+	
+	/**
+	 * SKY_DURATION: milisegundos
+	 */
 	private static final int SKY_DURATION = 200;
+	
+	/**
+	 *WAITING_TIME: (unix time) tiempo de espera para cambiar imagen
+	 */	
 	private static final int WAITING_TIME = 200;
-
+	
+	/**
+	 *fontPath: indica la ruta del estilo de escritura del mensaje
+	 */
 	private static final String fontPath = "resources/fonts/OnePiece.ttf";
-
+	
+	/**
+	 * stateID: estado del juego
+	 */
 	private int stateID;
 
+	/**
+	 * background: imagen de fondo
+	 */
 	private Image background;
+	
+	/**
+	 * mainCharacters: animación de aparecer y desaparecer de los personajes
+	 */
 	private FadeOutAnimation mainCharacters;
 
+	/**
+	 *mouseListener: listener de ratón
+	 */
 	private MouseListener mouseListener;
+
+	/**
+	 * keyListener: listener del teclado
+	 */
 	private KeyListener keyListener;
 
+	/**
+	 * sky: animación teclado
+	 */
 	private Animation sky;
 
+	/**
+	 * fpsFont: fuente para escribir
+	 */
 	private UnicodeFont fpsFont;
-	
+	/**
+	 * timeWaiting: (unix time) tiempo de espera
+	 */
 	private int timeWaiting;
-
+	/**
+	 * logger: variable para loge
+	 */
 	private final Logger logger = LoggerFactory.getLogger(OpeningState.class);
+	
 
 	@Override
 	public void enter(final GameContainer container, final StateBasedGame sb) {
@@ -63,7 +110,9 @@ public class PreMainMenuState extends BasicGameState {
 		initPreMenu();
 
 	}
-
+	/**
+	 * Inicializa el menú con las imágenes
+	 */
 	private void initPreMenu() {
 		try {
 			this.background = new Image("resources/image/menu/background.png");
@@ -103,6 +152,9 @@ public class PreMainMenuState extends BasicGameState {
 
 	}
 
+	/**
+	 * Carga animación del cielo
+	 */
 	private void loadSky() {
 		String source = "resources/sprites/intro/sky/sky";
 		sky = new Animation();
@@ -119,6 +171,10 @@ public class PreMainMenuState extends BasicGameState {
 
 	}
 
+	/**
+	 * constructor de la clase
+	 * @param stateID: estado del programa
+	 */
 	public PreMainMenuState(int stateID) {
 		this.stateID = stateID;
 	}
@@ -159,6 +215,7 @@ public class PreMainMenuState extends BasicGameState {
 
 		logger.error("eliminado");
 	}
+
 
 	private KeyListener initKeyListener(final StateBasedGame sb) {
 		KeyListener kl = new KeyListener() {

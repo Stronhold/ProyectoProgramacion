@@ -27,23 +27,61 @@ import de.matthiasmann.twl.theme.ThemeManager;
 import es.deusto.eside.programacion3.luffysurvival.LuffySurvival;
 import es.deusto.eside.programacion3.luffysurvival.language.Locale;
 
+/**
+ * Menú del juego
+ * @author sergio
+ *
+ */
 public class MainMenuState extends BasicGameState {
 
+	/**
+	 * MILLISECONDS_PER_DAY: está en unix time, un día son 86400 milisegundos
+	 */
 	private static final long MILLISECONDS_PER_DAY = 86400;
+	/**
+	 * stateID: número de estado en el que se encuentra
+	 */
 	private int stateID;
+	/**
+	 * Widget padre
+	 */
 	private Widget root;
 
+	/**
+	 * LWGLRenderer contexto de renderizado 
+	 */
 	private LWJGLRenderer lwjglRenderer;
-
+	/**
+	 * theme: tema usado para la escritura
+	 */
 	private Object theme;
 
+	/**
+	 * gui intefaz de usuario
+	 */
 	private GUI gui;
+	/**
+	 * twlInputoAdapter: gestiona las entradas de los botones
+	 */
 	private TWLInputAdapter twlInputAdapter;
 
+	/**
+	 * buttonInitGame: boton de inicio
+	 */
 	private Button buttonInitGame;
+	/**
+	 * buttonOption: botón de opciones
+	 */
 	private Button buttonOption;
+	/**
+	 * buttonCredits: botón de créditos
+	 */
 	private Button buttonCredits;
 
+	/**
+	 * Constructor de MainMenuState
+	 * @param id el id del estado
+	 */
 	public MainMenuState(int id) {
 		this.stateID = id;
 	}
@@ -80,11 +118,17 @@ public class MainMenuState extends BasicGameState {
 
 	}
 
+
 	@Override
 	public int getID() {
 		return this.stateID;
 	}
 
+	/**
+	 * 
+	 * @param gc: ventana del juego
+	 * @param sb: lleva el control de los estados del juego
+	 */
 	private void initGUI(final GameContainer gc, final StateBasedGame sb) {
 		initTWL(gc);
 		twlInputAdapter = new TWLInputAdapter(gui, gc.getInput());
@@ -94,10 +138,18 @@ public class MainMenuState extends BasicGameState {
 		loadBackground();
 	}
 
+	/**
+	 * Carga el fondo del estado en función de la hora
+	 */
 	private void  loadBackground() {
 		final String background = getBackground(System.currentTimeMillis() / 1000);
 	}
 
+	/**
+	 * 
+	 * @param time tiempo en formato de Unix
+	 * @return devuelve la dirección de la imagen
+	 */
 	String getBackground(final long time) {
 		long offset = time % MILLISECONDS_PER_DAY ;
 		String location = "resources/image/menu/backgounds/";
@@ -115,6 +167,10 @@ public class MainMenuState extends BasicGameState {
 		return location;
 	}
 
+	/**
+	 * Inicializa los botones del juego
+	 * @param sb: maneja el estado del juego
+	 */
 	private void initButtonsEvent(final StateBasedGame sb) {
 		buttonInitGame.addCallback(new Runnable() {	
 			@Override
@@ -124,6 +180,9 @@ public class MainMenuState extends BasicGameState {
 		});
 	}
 
+	/**
+	 * Crea los botones de opciones
+	 */
 	private void createButtons() {
 		buttonInitGame = new Button();
 		buttonInitGame.setText(Locale.INSTANCE.getText("start"));
@@ -156,6 +215,10 @@ public class MainMenuState extends BasicGameState {
 		buttonCredits.adjustSize();		
 	}
 
+	/**
+	 * Inicializa el tema de escritura
+	 * @param gc: ventana del juego
+	 */
 	private void initTWL(GameContainer gc) {
 		root = new Widget();
 		root.setTheme("");

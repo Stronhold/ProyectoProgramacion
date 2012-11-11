@@ -10,7 +10,11 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
 
-
+/**
+ * Estado de inicio de partida.
+ * @author sergio
+ *
+ */
 public class GamePlayState extends BasicGameState {
 
 	private static final String MAP_LOCATION = "resources/maps/level/1/mapa.tmx";

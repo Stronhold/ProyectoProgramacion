@@ -6,16 +6,30 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+/**
+ * En esta clase se visualizarán los créditos del juego
+ * @author sergio
+ *
+ */
 
 public class CreditState extends BasicGameState{
 
+	/**
+	 * stateID: estado del juego
+	 */
 	private int stateID;
 	
+	/**
+	 * constructor del juego
+	 * @param ordinal: número de estado
+	 */
 	public CreditState(int ordinal){
 		this.stateID = ordinal;
 	}
 
-
+	/**
+	 * devuelve el número de estado del juego
+	 */
 	public int getID() {
 		return this.stateID;
 	}
