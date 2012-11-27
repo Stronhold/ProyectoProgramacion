@@ -226,7 +226,6 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 	public void display(Memory memory) {
 		buffer = memory.getByteBuffer(0, LuffySurvival.WIDTH
 				* LuffySurvival.HEIGHT * 4);
-		logger.error("fa");
 	}
 
 	private MouseListener initMouserListener(final StateBasedGame sb) {

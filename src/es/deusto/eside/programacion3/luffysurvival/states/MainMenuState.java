@@ -78,6 +78,7 @@ public class MainMenuState extends BasicGameState {
 	 */
 	private Button buttonCredits;
 
+	private Image background;
 	/**
 	 * Constructor de MainMenuState
 	 * @param id el id del estado
@@ -106,7 +107,7 @@ public class MainMenuState extends BasicGameState {
 	@Override
 	public void render(GameContainer arg0, StateBasedGame arg1, Graphics g)
 			throws SlickException {
-		Image background = new Image(getBackground(MILLISECONDS_PER_DAY));
+		 
 		g.drawImage(background, 0,0);
 		twlInputAdapter.render();
 
@@ -135,14 +136,20 @@ public class MainMenuState extends BasicGameState {
 		
 		createButtons();
 		initButtonsEvent(sb);
-		loadBackground();
+		try {
+			loadBackground();
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * Carga el fondo del estado en función de la hora
+	 * @throws SlickException 
 	 */
-	private void  loadBackground() {
-		final String background = getBackground(System.currentTimeMillis() / 1000);
+	private void  loadBackground() throws SlickException {
+		background = new Image(getBackground(System.currentTimeMillis() / 1000));
 	}
 
 	/**

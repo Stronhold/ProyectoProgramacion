@@ -213,7 +213,6 @@ public class PreMainMenuState extends BasicGameState {
 		i.removeKeyListener(keyListener);
 		i.removeMouseListener(mouseListener);
 
-		logger.error("eliminado");
 	}
 
 
@@ -283,8 +282,6 @@ public class PreMainMenuState extends BasicGameState {
 			public void mouseReleased(int arg0, int arg1, int arg2) {
 				sb.enterState(GameState.MAIN_MENU_STATE.ordinal(),
 						new FadeOutTransition(), new FadeInTransition());
-				logger.error("Cambiando al menu principal");
-
 			}
 
 			@Override
