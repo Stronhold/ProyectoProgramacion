@@ -60,7 +60,7 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 	/**
 	 * VIDEO_FILE: dirección del video
 	 */
-	private static final String VIDEO_FILE = "resources/video/intro/intro.mp4";
+	private static final String VIDEO_FILE = "resources/Video/intro/intro.mp4";
 	
 	/**
 	 * mediaPlayerFactory: da acceso al VLC
