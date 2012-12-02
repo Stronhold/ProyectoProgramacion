@@ -48,11 +48,11 @@ public class Pruebas extends BasicGame {
 		g.drawAnimation(luffyAnimation.getAttackAnimation(), 0, 90);
 		g.drawAnimation(luffyAnimation.getStandAnimation(), 67, 90);
 		g.drawAnimation(luffyAnimation.getSpecialAttackAnimation(), 112, 90);
-		g.drawAnimation(namiAnimattion.getaStand(), 0, 0);
+		/*g.drawAnimation(namiAnimattion.getaStand(), 0, 0);
 		g.drawAnimation(namiAnimattion.getAttack(), 45, 0);
 		g.drawAnimation(namiAnimattion.getSuperAtack(), 202, 0);
 		g.drawAnimation(marineAnimation.getAttackAnimation(),0 , 180);
-		g.drawAnimation(marineAnimation.getStandAnimation(),90 , 180);
+		g.drawAnimation(marineAnimation.getStandAnimation(),90 , 180);*/
 
 	}
 
@@ -60,8 +60,8 @@ public class Pruebas extends BasicGame {
 	public void init(GameContainer container) throws SlickException {
 		// TODO Auto-generated method stub
 		luffyAnimation = new LuffyAnimation();
-		namiAnimattion = new NamiAnimattion();
-		marineAnimation = new MarineAnimation();
+		//namiAnimattion = new NamiAnimattion();
+		//marineAnimation = new MarineAnimation();
 	}
 
 	@Override

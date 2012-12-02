@@ -2,7 +2,7 @@ package es.deusto.eside.programacion3.luffysurvival.model;
 
 import org.newdawn.slick.Animation;
 
-public abstract class BasicPlayableCharacterAnimation {
+public abstract class BasicPlayableCharacterAnimation{
 	
 
 	Animation attackAnimation;

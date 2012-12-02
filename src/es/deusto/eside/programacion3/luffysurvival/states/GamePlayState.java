@@ -1,26 +1,29 @@
 package es.deusto.eside.programacion3.luffysurvival.states;
 
+
 import java.io.IOException;
 import java.net.URL;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
+import org.omg.PortableServer.AdapterActivator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import TWLSlick.TWLInputAdapter;
-import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.ColumnLayout;
-import de.matthiasmann.twl.Container;
 import de.matthiasmann.twl.GUI;
 import de.matthiasmann.twl.ScrollPane;
 import de.matthiasmann.twl.Widget;
@@ -30,6 +33,8 @@ import es.deusto.eside.programacion3.luffysurvival.LuffySurvival;
 import es.deusto.eside.programacion3.luffysurvival.engine.ContainerList;
 import es.deusto.eside.programacion3.luffysurvival.engine.Icon;
 import es.deusto.eside.programacion3.luffysurvival.engine.IconClickListener;
+import es.deusto.eside.programacion3.luffysurvival.model.Entity;
+import es.deusto.eside.programacion3.luffysurvival.model.MainCharacter;
 
 /**
  * Estado de inicio de partida.
@@ -42,8 +47,13 @@ public class GamePlayState extends BasicGameState {
 	private static final String MAP_LOCATION = "resources/maps/level/1/mapa.tmx";
 
 	private final Logger logger = LoggerFactory.getLogger(GamePlayState.class);
+	private static final int ROWS = 3;
+	private static final int COLUMNS = 6;
 
 	private int stateId;
+	
+	//private List <MainCharacter> listPlayableCharacters;
+	
 	private TiledMap map;
 	/**
 	 * Widget padre
@@ -71,16 +81,50 @@ public class GamePlayState extends BasicGameState {
 
 	private ScrollPane actionsContainer;
 
+	private boolean playerAdd;
+	
+	private Color PLACE_OCCUPIED = new Color(255, 0, 0, 120);
+	
+	private Color PLACE_FREE = new Color(0, 255, 255, 120);
+
+	private Entity [][] entities;
+	
+	private List<Polygon> polygonList;
+	
+	private  MainCharacter selectedPlayableCharacter;
+	
+	private HashMap<String, MainCharacter> charactersPlaced;
+
+
 	public GamePlayState(int ordinal) {
 		this.stateId = ordinal;
 	}
+	
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sb) throws SlickException {
 		this.map = new TiledMap(MAP_LOCATION);
 		initGUI(gc, sb);
-		
 		initPlayerSelector();
+		initAreaCharacter();
+		initPlayableCharacters();
+		entities = new Entity[3][6];
+		for (int i = 0; i < ROWS; i++)
+			for (int j = 0; j < COLUMNS; j++)
+				entities[i][j] = null;
+	}
+	
+	private void initPlayableCharacters(){
+		charactersPlaced = new HashMap<String, MainCharacter>();
+		charactersPlaced.put("Luffy", new MainCharacter("resources/sprites/Luffy/luffy.txt" , "Luffy"));
+		charactersPlaced.put("Zoro", new MainCharacter("resources/sprites/Zoro/Zoro.txt", "Zoro"));
+		charactersPlaced.put("Nami", new MainCharacter("resources/sprites/Nami/Nami.txt", "Nami"));
+		charactersPlaced.put("Usopp", new MainCharacter("resources/sprites/Usopp/Usopp.txt" , "Usopp"));
+		charactersPlaced.put("Sanji", new MainCharacter("resources/sprites/Sanji/Sanji.txt", "Sanji"));
+		charactersPlaced.put("Chopper", new MainCharacter("resources/sprites/Chopper/Chopper.txt", "Chopper"));
+		charactersPlaced.put("Robin", new MainCharacter("resources/sprites/NicoRobin/Nico.txt", "Robin"));
+		charactersPlaced.put("Franky", new MainCharacter("resources/sprites/Brook/Brook.txt", "Brook"));
+		charactersPlaced.put("Brook", new MainCharacter("resources/sprites/Franky/Franky.txt", "Franky"));
 	}
 	
 	private void initPlayerSelector(){
@@ -92,7 +136,13 @@ public class GamePlayState extends BasicGameState {
 
 			@Override
 			public void onClick() {
-				logger.error("Luffy");
+				if (!playerAdd){
+					MainCharacter temp = charactersPlaced.remove("Luffy");
+					if (temp != null) {
+						selectedPlayableCharacter = temp;
+						playerAdd = true;
+					}
+				}
 			}
 		});
 		list.addIcon(luffyIcon);
@@ -101,7 +151,13 @@ public class GamePlayState extends BasicGameState {
 
 			@Override
 			public void onClick() {
-				logger.error("Nami");
+				if (!playerAdd){
+					MainCharacter temp= charactersPlaced.remove("Nami");
+					if (temp != null) {
+						selectedPlayableCharacter = temp;
+						playerAdd = true;
+					}
+				}
 			}
 		});
 		list.addIcon(namiIcon);
@@ -111,9 +167,15 @@ public class GamePlayState extends BasicGameState {
 
 			@Override
 			public void onClick() {
-				logger.error("Zoro");
+				if(!playerAdd){
+					MainCharacter temp = charactersPlaced.remove("Zoro");
+					if (temp != null) {
+						selectedPlayableCharacter = temp;
+						playerAdd = true;
+					}
+				}
 			}
-		});
+			});
 		list.addIcon(zoroIcon);
 		
 		Icon usoppIcon = new Icon("resources/theme/listContainer/usoppFace.png");
@@ -121,8 +183,14 @@ public class GamePlayState extends BasicGameState {
 
 			@Override
 			public void onClick() {
-				logger.error("Usopp");
+				if(!playerAdd){
+					MainCharacter temp = charactersPlaced.remove("Usopp");
+					if (temp != null) {
+						selectedPlayableCharacter = temp;
+						playerAdd = true;
+				}
 			}
+		}
 		});
 		list.addIcon(usoppIcon);
 		
@@ -131,7 +199,13 @@ public class GamePlayState extends BasicGameState {
 
 			@Override
 			public void onClick() {
-				logger.error("sanji");
+				if(!playerAdd){
+					MainCharacter temp = charactersPlaced.remove("Sanji");
+					if (temp != null) {
+						selectedPlayableCharacter = temp;
+						playerAdd = true;
+					}
+				}
 			}
 		});
 		list.addIcon(sanjiIcon);
@@ -141,7 +215,13 @@ public class GamePlayState extends BasicGameState {
 
 			@Override
 			public void onClick() {
-				logger.error("Chopper");
+					if(!playerAdd){
+						MainCharacter temp = charactersPlaced.remove("Chopper");
+						if (temp != null) {
+							selectedPlayableCharacter = temp;
+							playerAdd = true;
+						}
+					}
 			}
 		});
 		list.addIcon(chopperIcon);
@@ -151,7 +231,13 @@ public class GamePlayState extends BasicGameState {
 
 			@Override
 			public void onClick() {
-				logger.error("Robbin");
+				if(!playerAdd){
+					MainCharacter temp = charactersPlaced.remove("Robin");
+					if (temp != null) {
+						selectedPlayableCharacter = temp;
+						playerAdd = true;
+					}
+				}
 			}
 		});
 		list.addIcon(robinIcon);
@@ -161,7 +247,13 @@ public class GamePlayState extends BasicGameState {
 
 			@Override
 			public void onClick() {
-				logger.error("Franky");
+				if(!playerAdd){
+					MainCharacter temp = charactersPlaced.remove("Brook");
+					if (temp != null) {
+						selectedPlayableCharacter = temp;
+						playerAdd = true;
+					}
+				}
 			}
 		});
 		list.addIcon(frankyIcon);
@@ -171,7 +263,13 @@ public class GamePlayState extends BasicGameState {
 
 			@Override
 			public void onClick() {
-				logger.error("Brook");
+				if (!playerAdd){
+					MainCharacter temp = charactersPlaced.remove("Franky");
+					if (temp != null) {
+						selectedPlayableCharacter = temp;
+						playerAdd = true;
+					}
+				}
 			}
 		});
 		list.addIcon(brookIcon);
@@ -183,15 +281,7 @@ public class GamePlayState extends BasicGameState {
 		twlInputAdapter = new TWLInputAdapter(gui, gc.getInput());
 		twlInputAdapter.getGui().getRootPane()
 				.setSize(LuffySurvival.WIDTH, LuffySurvival.HEIGHT);
-
-		Button b = new Button();
-		b.setPosition(0, 0);
-		b.setText("Mierda");
-		b.adjustSize();
 		Widget content = new Widget();
-		content.add(b);
-		content.adjustSize();
-		// twlInputAdapter.getGui().getRootPane().add(b);
 		ColumnLayout cl = new ColumnLayout();
 		this.actionsContainer = new ScrollPane(content);
 		actionsContainer.setTheme("scrollpane");
@@ -201,7 +291,6 @@ public class GamePlayState extends BasicGameState {
 		actionsContainer.adjustSize();
 		actionsContainer.setClip(true);
 		twlInputAdapter.getGui().getRootPane().add(actionsContainer);
-		b.adjustSize();
 		actionsContainer.adjustSize();
 
 	}
@@ -242,9 +331,64 @@ public class GamePlayState extends BasicGameState {
 		this.map.render(0, 0);
 		list.draw();
 		twlInputAdapter.render();
-
+		if (playerAdd) {
+			drawAreaCharacter(g);			 
+		}
+		
+		for (int i = 0; i < entities.length; i++) {
+			for (int j =0; j < entities[i].length; j++){
+				if (entities[i][j] != null) {
+					entities[i][j].draw();
+				}
+			}			
+		}
 	}
 
+	private void drawAreaCharacter(Graphics g) {
+		int counter = 0;
+		for (Polygon p : polygonList) {
+			if (this.entities[counter / 2] [counter % 2] != null){
+				g.setColor(PLACE_OCCUPIED);
+			} else {
+				g.setColor(PLACE_FREE);
+			}
+			g.fill(p);
+
+			g.draw(p);
+			counter++;
+		}
+		
+	}
+
+	public void initAreaCharacter(){
+		polygonList = new ArrayList<Polygon>();
+		for (int i = 0; i < 2; i++) {
+			Polygon a = new Polygon();
+			a.addPoint(135 + i *90, 180);
+			a.addPoint(135 + i *90 +90, 180);
+			a.addPoint(90 + i *90 +90, 180+90);
+			a.addPoint(90 + i *90, 180 +90);
+			polygonList.add(a);
+		}
+		for (int i = 0; i < 2; i++) {
+			Polygon a = new Polygon();
+			a.addPoint(90 + i *90, 180+90);
+			a.addPoint(90 + i *90 +90, 180+90);
+			a.addPoint(45 + i *90 +90, 180+90*2);
+			a.addPoint(45 + i *90, 180 +90*2);
+			polygonList.add(a);
+		}
+		
+		for (int i = 0; i < 2; i++) {
+			Polygon a = new Polygon();
+			a.addPoint(45 + i *90, 180+90*2);
+			a.addPoint(45 + i *90 +90, 180+90*2);
+			a.addPoint(0 + i *90 +90, 180*2+90);
+			a.addPoint(0 + i *90, 180*2 +90);
+			polygonList.add(a);
+		}
+	}
+	
 	@Override
 	public void update(GameContainer gc, StateBasedGame sb, int arg2)
 			throws SlickException {
@@ -252,9 +396,45 @@ public class GamePlayState extends BasicGameState {
 
 		int mouseX = input.getMouseX();
 		int mouseY = input.getMouseY();
-		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+		boolean leftButtonPressed = input.isMousePressed(Input.MOUSE_LEFT_BUTTON);
+		if (leftButtonPressed) {
 			list.update(mouseX, mouseY);
 		}
+		
+		if (this.playerAdd) {
+			int counter = 0;
+			for (Polygon p : polygonList) {
+				if (p.contains(mouseX, mouseY) && leftButtonPressed 
+						
+						&& entities[counter/2][counter % 2] == null)  {
+				
+					entities[counter/2][counter%2] = this.selectedPlayableCharacter;
+					setPlayableCharacterPosition(this.selectedPlayableCharacter, counter/2, counter%2);
+					this.selectedPlayableCharacter = null;
+					this.playerAdd = false;
+					break;
+				}
+				counter++;
+			}
+			
+		}
+	}
+	
+	private void setPlayableCharacterPosition(
+			MainCharacter selectedPlayableCharacter2, int i, int j) {
+		if (i ==0) {
+			selectedPlayableCharacter2.setX(90 + j * 90);
+			selectedPlayableCharacter2.setY(180 + 90 - selectedPlayableCharacter2.getHeight());
+
+		} else if (i == 1){
+			selectedPlayableCharacter2.setX(45 + j *90);
+			selectedPlayableCharacter2.setY(180 + 90 *2 - selectedPlayableCharacter2.getHeight());
+
+		} else if (i == 2) {
+			selectedPlayableCharacter2.setX(0 + j *90);
+			selectedPlayableCharacter2.setY(180 + 90 * 3 - selectedPlayableCharacter2.getHeight());
+		}
+				
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import org.newdawn.slick.SpriteSheet;
 
 public class LuffyAnimation  extends BasicPlayableCharacterAnimation{
 	
-	private final static String STAND_SPRITE_SHEET = "resources/sprites/LuffyStatic.png";
+	private final static String STAND_SPRITE_SHEET = "resources/sprites/Luffy/LuffyStatic.png";
 	private final static int STAND_WIDTH = 45;
 	private final static int STAND_HEIGHT = 90;
 
@@ -41,7 +41,7 @@ public class LuffyAnimation  extends BasicPlayableCharacterAnimation{
 		SpriteSheet luffy;
 		try {
 			luffy = new SpriteSheet(
-					"resources/sprites/LuffyAtackFixed.png", 67, 90);
+					"resources/sprites/Luffy/LuffyAtackFixed.png", 67, 90);
 			this.attackAnimation = new Animation();
 			this.attackAnimation.setAutoUpdate(true);
 			for (int frame = 0; frame < 11; frame++) {
@@ -58,7 +58,7 @@ public class LuffyAnimation  extends BasicPlayableCharacterAnimation{
 		SpriteSheet luffy;
 		try {
 			luffy = new SpriteSheet(
-					"resources/sprites/LuffyFinalAttack.png", 180, 90);
+					"resources/sprites/Luffy/LuffyFinalAttack.png", 180, 90);
 			this.specialAttackAnimation = new Animation();
 			this.specialAttackAnimation.setAutoUpdate(true);
 			for (int frame = 0; frame < 22; frame++) {
