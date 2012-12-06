@@ -1,7 +1,7 @@
 package es.deusto.eside.programacion3.luffysurvival.states;
 
 /**
- * Enumeración de los estados del juego
+ * Enumeracion de los estados del juego
  * @author sergio
  *
  */

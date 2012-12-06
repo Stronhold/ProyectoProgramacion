@@ -9,41 +9,67 @@ import org.newdawn.slick.SlickException;
 
 public class ContainerList implements Renderable {
 	
+	/**
+	 * Imagen de fondo
+	 */
 	private Image background;
+	/** 
+	 * Imagen de flecha
+	 */
 	private Image upArrow;
+	/**
+	 * Imagen de flecha
+	 */
 	private Image downArrow;
 	
-	
+	/**
+	 * Indica la coordenada x del icono
+	 */
 	private static  final int ICON_X_POSITION = 28;
+	/**
+	 * Indica la coordenada y del icono
+	 */
 	private static  final int ICON_Y_POSITION = 9;
 
+	/**
+	 * Numero de iconos por linea
+	 */
 	private static final int ICONS_PER_LINE = 4;
 
-
+	/**
+	 * Coordenadas
+	 */
 	private int x, y;
+	
+	/**
+	 * Lista de iconos
+	 */
+	private List<Icon> icons;
+	
+	/**
+	 * Fila actual
+	 */
+	private int currentRow;
+	
 	public int getX() {
 		return x;
 	}
-
 
 	public void setX(int x) {
 		this.x = x;
 	}
 
-
 	public int getY() {
 		return y;
 	}
-
 
 	public void setY(int y) {
 		this.y = y;
 	}
 
-	private List<Icon> icons;
-	
-	private int currentRow;
-	
+	/**
+	 * Constructor del contenedor
+	 */
 	public ContainerList() {
 		currentRow = 0;
 		icons = new ArrayList<Icon>();
@@ -56,11 +82,17 @@ public class ContainerList implements Renderable {
 		}
 	}
 
-
+	/**
+	 * Añade un icono
+	 * @param a icono
+	 */
 	public void addIcon(final Icon a) {
 		icons.add(a);
 	}
 
+	/**
+	 * Dibuja
+	 */
 	public void draw () {
 		draw(x,y);
 	}
@@ -77,6 +109,11 @@ public class ContainerList implements Renderable {
 	}
 
 
+	/**
+	 * Actualiza el contenedor
+	 * @param mouseX coordenada x
+	 * @param mouseY coordenada y
+	 */
 	public void update(int mouseX, int mouseY) {
 		if (mouseX >= 9 + x && mouseX <= upArrow.getWidth() + 9 + x
 				&& mouseY >= 23 + y && mouseY <= upArrow.getHeight() + 23 +y

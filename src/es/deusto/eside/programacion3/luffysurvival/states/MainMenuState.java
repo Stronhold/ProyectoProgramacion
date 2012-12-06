@@ -28,18 +28,18 @@ import es.deusto.eside.programacion3.luffysurvival.LuffySurvival;
 import es.deusto.eside.programacion3.luffysurvival.language.Locale;
 
 /**
- * Menú del juego
+ * Menu del juego
  * @author sergio
  *
  */
 public class MainMenuState extends BasicGameState {
 
 	/**
-	 * MILLISECONDS_PER_DAY: está en unix time, un día son 86400 milisegundos
+	 * MILLISECONDS_PER_DAY: esta en unix time, un día son 86400 milisegundos
 	 */
 	private static final long MILLISECONDS_PER_DAY = 86400;
 	/**
-	 * stateID: número de estado en el que se encuentra
+	 * stateID: numero de estado en el que se encuentra
 	 */
 	private int stateID;
 	/**
@@ -52,7 +52,7 @@ public class MainMenuState extends BasicGameState {
 	 */
 	private LWJGLRenderer lwjglRenderer;
 	/**
-	 * theme: tema usado para la escritura
+	 * theme tema usado para la escritura
 	 */
 	private Object theme;
 
@@ -70,11 +70,11 @@ public class MainMenuState extends BasicGameState {
 	 */
 	private Button buttonInitGame;
 	/**
-	 * buttonOption: botón de opciones
+	 * buttonOption: boton de opciones
 	 */
 	private Button buttonOption;
 	/**
-	 * buttonCredits: botón de créditos
+	 * buttonCredits: boton de creditos
 	 */
 	private Button buttonCredits;
 

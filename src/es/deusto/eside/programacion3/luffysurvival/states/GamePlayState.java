@@ -18,9 +18,6 @@ import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
-import org.omg.PortableServer.AdapterActivator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import TWLSlick.TWLInputAdapter;
 import de.matthiasmann.twl.ColumnLayout;
@@ -33,6 +30,7 @@ import es.deusto.eside.programacion3.luffysurvival.LuffySurvival;
 import es.deusto.eside.programacion3.luffysurvival.engine.ContainerList;
 import es.deusto.eside.programacion3.luffysurvival.engine.Icon;
 import es.deusto.eside.programacion3.luffysurvival.engine.IconClickListener;
+import es.deusto.eside.programacion3.luffysurvival.model.BasicCharacter;
 import es.deusto.eside.programacion3.luffysurvival.model.Entity;
 import es.deusto.eside.programacion3.luffysurvival.model.MainCharacter;
 
@@ -44,16 +42,30 @@ import es.deusto.eside.programacion3.luffysurvival.model.MainCharacter;
  */
 public class GamePlayState extends BasicGameState {
 
+	/**
+	 * Direccion del mapa del nivel 1
+	 */
 	private static final String MAP_LOCATION = "resources/maps/level/1/mapa.tmx";
 
-	private final Logger logger = LoggerFactory.getLogger(GamePlayState.class);
+	/**
+	 * Numero de filas 
+	 */
 	private static final int ROWS = 3;
+	/**
+	 * Numero de columnas
+	 */
 	private static final int COLUMNS = 6;
-
+	/**
+	 * Numero del estado del juego
+	 */
 	private int stateId;
 	
-	//private List <MainCharacter> listPlayableCharacters;
+	private List<MainCharacter> enemyList;
 	
+	private int money = 1000;
+	/**
+	 * Mapa del nivel 1
+	 */
 	private TiledMap map;
 	/**
 	 * Widget padre
@@ -76,31 +88,56 @@ public class GamePlayState extends BasicGameState {
 	 * twlInputoAdapter: gestiona las entradas de los botones
 	 */
 	private TWLInputAdapter twlInputAdapter;
-
+	/**
+	 * Contenedor de los personajes
+	 */
 	private ContainerList list;
-
+	/**
+	 * Contenedor de los personajes
+	 */
 	private ScrollPane actionsContainer;
-
+	/**
+	 * Indica si un personaje se puede añadir
+	 */
 	private boolean playerAdd;
-	
+	/**
+	 * Color de si un espacio está ocupado
+	 */
 	private Color PLACE_OCCUPIED = new Color(255, 0, 0, 120);
-	
+	/**
+	 * Color de un espacio libre
+	 */
 	private Color PLACE_FREE = new Color(0, 255, 255, 120);
-
+	/**
+	 * Indica los espacios ya ocupados
+	 */
 	private Entity [][] entities;
-	
+	/**
+	 * rectangulos del suelo
+	 */
 	private List<Polygon> polygonList;
-	
+	/**
+	 * Personaje seleccionado para colocar
+	 */
 	private  MainCharacter selectedPlayableCharacter;
-	
+	/**
+	 * Contiene los personajes que no se han colocado
+	 */
 	private HashMap<String, MainCharacter> charactersPlaced;
 
-
+	/**
+	 * Constructor
+	 * @param ordinal indica el estado en el que se encuentra
+	 */
 	public GamePlayState(int ordinal) {
 		this.stateId = ordinal;
 	}
-	
 
+	private void initEnemies(){
+		enemyList = new ArrayList<MainCharacter>();
+		enemyList.add(new MainCharacter("resources/sprites/Marine/marine.txt", "Marine"));
+	}
+	
 	@Override
 	public void init(GameContainer gc, StateBasedGame sb) throws SlickException {
 		this.map = new TiledMap(MAP_LOCATION);
@@ -108,12 +145,16 @@ public class GamePlayState extends BasicGameState {
 		initPlayerSelector();
 		initAreaCharacter();
 		initPlayableCharacters();
+		initEnemies();
 		entities = new Entity[3][6];
 		for (int i = 0; i < ROWS; i++)
 			for (int j = 0; j < COLUMNS; j++)
 				entities[i][j] = null;
 	}
 	
+	/**
+	 * Inicializa los personajes del juego
+	 */
 	private void initPlayableCharacters(){
 		charactersPlaced = new HashMap<String, MainCharacter>();
 		charactersPlaced.put("Luffy", new MainCharacter("resources/sprites/Luffy/luffy.txt" , "Luffy"));
@@ -127,6 +168,10 @@ public class GamePlayState extends BasicGameState {
 		charactersPlaced.put("Brook", new MainCharacter("resources/sprites/Franky/Franky.txt", "Franky"));
 	}
 	
+
+	/**
+	 * Inicializa la selección de personajes
+	 */
 	private void initPlayerSelector(){
 		list = new ContainerList();
 		list.setX(0);
@@ -275,6 +320,11 @@ public class GamePlayState extends BasicGameState {
 		list.addIcon(brookIcon);
 	}
 
+	/**
+	 * Inicializa el contenedor 
+	 * @param gc ventana
+	 * @param sb estado del juego
+	 */
 	private void initGUI(final GameContainer gc, final StateBasedGame sb) {
 		initTWL(gc);
 
@@ -297,9 +347,7 @@ public class GamePlayState extends BasicGameState {
 
 	/**
 	 * Inicializa el tema de escritura
-	 * 
-	 * @param gc
-	 *            : ventana del juego
+	 * @param gc: ventana del juego   
 	 */
 	private void initTWL(GameContainer gc) {
 		root = new Widget();
@@ -344,6 +392,10 @@ public class GamePlayState extends BasicGameState {
 		}
 	}
 
+	/**
+	 * Dibuja los espacios del juego
+	 * @param g contexto gráfico
+	 */
 	private void drawAreaCharacter(Graphics g) {
 		int counter = 0;
 		for (Polygon p : polygonList) {
@@ -360,6 +412,9 @@ public class GamePlayState extends BasicGameState {
 		
 	}
 
+	/**
+	 * Inicializa los areas donde se desarrolla el juego
+	 */
 	public void initAreaCharacter(){
 		polygonList = new ArrayList<Polygon>();
 		for (int i = 0; i < 2; i++) {
@@ -389,11 +444,12 @@ public class GamePlayState extends BasicGameState {
 		}
 	}
 	
+
 	@Override
 	public void update(GameContainer gc, StateBasedGame sb, int arg2)
 			throws SlickException {
 		Input input = gc.getInput();
-
+		//setEnemiPosition(enemyList, 1, 1);
 		int mouseX = input.getMouseX();
 		int mouseY = input.getMouseY();
 		boolean leftButtonPressed = input.isMousePressed(Input.MOUSE_LEFT_BUTTON);
@@ -420,8 +476,14 @@ public class GamePlayState extends BasicGameState {
 		}
 	}
 	
+	/**
+	 * Coloca el personaje
+	 * @param selectedPlayableCharacter2 personaje elegido para colocar
+	 * @param i posicion
+	 * @param j posicion
+	 */
 	private void setPlayableCharacterPosition(
-			MainCharacter selectedPlayableCharacter2, int i, int j) {
+			BasicCharacter selectedPlayableCharacter2, int i, int j) {
 		if (i ==0) {
 			selectedPlayableCharacter2.setX(90 + j * 90);
 			selectedPlayableCharacter2.setY(180 + 90 - selectedPlayableCharacter2.getHeight());
@@ -436,6 +498,21 @@ public class GamePlayState extends BasicGameState {
 		}
 				
 	}
+	/*private void setEnemiPosition(List<MainCharacter> eL, int row, int enemy){
+		MainCharacter e = eL.get(enemy);
+		if (row ==0) {
+			e.setX(360);
+			e.setY(180 + 90 - e.getHeight());
+
+		} else if (row == 1){
+			e.setX(360);
+			e.setY(180 + 90 *2 - e.getHeight());
+
+		} else if (row == 2) {
+			e.setX(360);
+			e.setY(180 + 90 * 3 - e.getHeight());
+		}
+	}*/
 
 	@Override
 	public int getID() {

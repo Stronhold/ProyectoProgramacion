@@ -8,13 +8,25 @@ import org.newdawn.slick.SlickException;
 
 public class Icon {
 
+	/**
+	 * ancho
+	 */
 	public static final int ICON_WIDTH = 58;
+	/**
+	 * Alto
+	 */
 	public static final int ICON_HEIGHT = 64;
-	
+	/**
+	 * Imagen
+	 */
 	private Image image;
-	
+	/**
+	 * Lista de listener
+	 */
 	private List<IconClickListener> listeners;
-	
+	/**
+	 * coordenadas
+	 */
 	private int x, y;
 	
 	public int getX() {
@@ -32,7 +44,10 @@ public class Icon {
 	public void setY(int y) {
 		this.y = y;
 	}
-
+	/**
+	 * Constructor
+	 * @param file direccion de la imagen
+	 */
 	public Icon(final String file) {
 		try {
 			image = new Image(file);
@@ -44,11 +59,22 @@ public class Icon {
 		}
 		listeners = new ArrayList<IconClickListener>();
 	}
-	
+	/**
+	 * Anade un listener al objeto
+	 * @param l listener
+	 */
 	public void addIconClickListener(final IconClickListener l) {
 		listeners.add(l);		
 	}
 	
+	/**
+	 * Indica si ha sido pinchado el icono
+	 * @param mouseX coordenada x
+	 * @param mouseY coordenada y
+	 * @param posX coordenada x
+	 * @param posY coordenada y
+	 * @return
+	 */
 	public boolean update(final int mouseX, final int mouseY, int posX , int posY) {
 		boolean result = false;
 		
@@ -62,7 +88,11 @@ public class Icon {
 		
 		return result;
 	}
-	
+	/**
+	 * Dibuja
+	 * @param f coordenada
+	 * @param g cordenada
+	 */
 	public void draw(final float f, final float g) {
 		image.draw(f,g);
 	}
