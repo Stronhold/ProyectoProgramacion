@@ -125,6 +125,8 @@ public class GamePlayState extends BasicGameState {
 	 */
 	private HashMap<String, MainCharacter> charactersPlaced;
 
+	private Icon delete;
+	
 	/**
 	 * Constructor
 	 * @param ordinal indica el estado en el que se encuentra
@@ -141,7 +143,7 @@ public class GamePlayState extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sb) throws SlickException {
 		this.map = new TiledMap(MAP_LOCATION);
-		initGUI(gc, sb);
+	//	initGUI(gc, sb);
 		initPlayerSelector();
 		initAreaCharacter();
 		initPlayableCharacters();
@@ -378,7 +380,7 @@ public class GamePlayState extends BasicGameState {
 			throws SlickException {
 		this.map.render(0, 0);
 		list.draw();
-		twlInputAdapter.render();
+		//twlInputAdapter.render();
 		if (playerAdd) {
 			drawAreaCharacter(g);			 
 		}
@@ -446,20 +448,22 @@ public class GamePlayState extends BasicGameState {
 	
 
 	@Override
-	public void update(GameContainer gc, StateBasedGame sb, int arg2)
+	public void update(GameContainer gc, StateBasedGame sb, int delta)
 			throws SlickException {
 		Input input = gc.getInput();
-		//setEnemiPosition(enemyList, 1, 1);
+		enterInput(input);
 		int mouseX = input.getMouseX();
 		int mouseY = input.getMouseY();
 		boolean leftButtonPressed = input.isMousePressed(Input.MOUSE_LEFT_BUTTON);
 		if (leftButtonPressed) {
 			list.update(mouseX, mouseY);
+		
 		}
 		
 		if (this.playerAdd) {
 			int counter = 0;
 			for (Polygon p : polygonList) {
+				
 				if (p.contains(mouseX, mouseY) && leftButtonPressed 
 						
 						&& entities[counter/2][counter % 2] == null)  {
@@ -468,11 +472,19 @@ public class GamePlayState extends BasicGameState {
 					setPlayableCharacterPosition(this.selectedPlayableCharacter, counter/2, counter%2);
 					this.selectedPlayableCharacter = null;
 					this.playerAdd = false;
-					break;
+					return;
 				}
 				counter++;
 			}
 			
+		}  else {
+			for (int i = 0; i < entities.length; i++) {
+				for (int j =0; j < entities[i].length; j++){
+					if (entities[i][j] != null) {
+						entities[i][j].update(leftButtonPressed, mouseX, mouseY, delta);
+					}
+				}			
+			}
 		}
 	}
 	
@@ -498,21 +510,10 @@ public class GamePlayState extends BasicGameState {
 		}
 				
 	}
-	/*private void setEnemiPosition(List<MainCharacter> eL, int row, int enemy){
-		MainCharacter e = eL.get(enemy);
-		if (row ==0) {
-			e.setX(360);
-			e.setY(180 + 90 - e.getHeight());
-
-		} else if (row == 1){
-			e.setX(360);
-			e.setY(180 + 90 *2 - e.getHeight());
-
-		} else if (row == 2) {
-			e.setX(360);
-			e.setY(180 + 90 * 3 - e.getHeight());
-		}
-	}*/
+	
+	private void enterInput(Input i){
+		
+	}
 
 	@Override
 	public int getID() {
