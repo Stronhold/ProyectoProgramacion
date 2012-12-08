@@ -120,6 +120,9 @@ public class GamePlayState extends BasicGameState {
 	 * Indica los espacios ya ocupados
 	 */
 	private Entity[][] entities;
+	
+	private boolean[][] moveEnable;
+
 	/**
 	 * rectangulos del suelo
 	 */
@@ -161,10 +164,13 @@ public class GamePlayState extends BasicGameState {
 		initPlayerSelector();
 		initAreaCharacter();
 		initPlayableCharacters();
-		entities = new Entity[3][6];
+		entities = new Entity[3][7];
+		moveEnable = new boolean[3][7];
 		for (int i = 0; i < ROWS; i++)
-			for (int j = 0; j < COLUMNS; j++)
+			for (int j = 0; j < COLUMNS; j++) {
 				entities[i][j] = null;
+				moveEnable[i][j] = true;
+			}
 	}
 
 	/**
@@ -535,22 +541,30 @@ public class GamePlayState extends BasicGameState {
 
 		if (this.lastMovement > 0 && this.lastMovement >= ENEMY_PER_SECOND / 2) {
 			lastMovement = ENEMY_PER_SECOND / 2 - lastMovement;
-			
-		
+			for (int i = 0; i < entities.length; i++) {
+				for (int j = 0; j < entities[i].length; j++) {
+					moveEnable[i][j] = (entities[i][j] == null) ? true : false;
+					if (j > 0 && moveEnable[i][j-1] == true && entities[i][j] instanceof BasicEnemy) {
+						moveEnable[i][j] = true;
+					}
+				}
+			}
+			addEnemy();
+
 		}
 		if (lastMovement < 0 && lastMovement > -ENEMY_PER_SECOND / 2) {
 			lastMovement -= delta;
 			for (int i = 0; i < entities.length; i++) {
 				for (int j = 0; j < entities[i].length; j++) {
-					if (j - 1  >= 0 && entities[i][j - 1] == null && entities[i][j] != null && 
-							entities[i][j] instanceof BasicEnemy) {
+					if (j - 1  >= 0  && entities[i][j - 1] == null  && entities[i][j] != null && 
+							entities[i][j] instanceof BasicEnemy && moveEnable[i][j - 1] ) {
 						int x = 0;
 						if (i == 0) {
 							x = j * 90 + 135 - entities[i][j].getWidth();
 						} else if (i == 1) {
 							x = j * 90 + 90 - entities[i][j].getWidth();
 						} else if (i == 2) {
-							x = j * 90 + 45 - entities[i][j].getWidth();
+							x = j  * 90 + 45 - entities[i][j].getWidth();
 						}
 						float f = (90f / (ENEMY_PER_SECOND / 2f))* lastMovement;
 						x = (int) (x + f);
@@ -600,7 +614,6 @@ public class GamePlayState extends BasicGameState {
 		boolean leftButtonPressed = input
 				.isMousePressed(Input.MOUSE_LEFT_BUTTON);
 
-		addEnemy(delta);
 		if (leftButtonPressed) {
 			list.update(mouseX, mouseY);
 
@@ -637,9 +650,9 @@ public class GamePlayState extends BasicGameState {
 		}
 
 	}
+		
 
-	private void addEnemy(int delta) {
-		if (ENEMY_PER_SECOND <= lastEnemy) {
+	private void addEnemy() {
 			BasicEnemy marine = new BasicEnemy(
 					"resources/sprites/Marine/marine.txt", "marine");
 			enemi.add(marine);
@@ -651,23 +664,21 @@ public class GamePlayState extends BasicGameState {
 				int x = 0;
 				int y = 0;
 				if (row == 0) {
-					x = 5 * 90 + 135 - marine.getWidth();
+					x = 6 * 90 + 135 - marine.getWidth();
 					y = 180 + 90 - marine.getHeight();
 				} else if (row == 1) {
-					x = 5 * 90 + 90 - marine.getWidth();
+					x =6 * 90 + 90 - marine.getWidth();
 					y = 180 + 90 * 2 - marine.getHeight();
 				} else if (row == 2) {
-					x = 5 * 90 + 45 - marine.getWidth();
+					x = 6 * 90 + 45 - marine.getWidth();
 					y = 180 + 90 * 3 - marine.getHeight();
 				}
 				marine.setX(x);
 				marine.setY(y);
-				entities[row][5] = marine;
+				entities[row][6] = marine;
 			}
-			lastEnemy = 0;
 
-		}
-		lastEnemy += delta;
+		
 	}
 
 	/**
