@@ -48,6 +48,8 @@ import es.deusto.eside.programacion3.luffysurvival.model.MainCharacter;
  */
 public class GamePlayState extends BasicGameState {
 
+	private static final int ENEMY_PER_SECOND = 5000;
+
 	/**
 	 * Direccion del mapa del nivel 1
 	 */
@@ -143,8 +145,11 @@ public class GamePlayState extends BasicGameState {
 		this.stateId = ordinal;
 	}
 
+	public int lastEnemy;
+
 	@Override
 	public void init(GameContainer gc, StateBasedGame sb) throws SlickException {
+		lastEnemy = ENEMY_PER_SECOND;
 		this.map = new TiledMap(MAP_LOCATION);
 		// initGUI(gc, sb);
 		initPlayerSelector();
@@ -520,6 +525,7 @@ public class GamePlayState extends BasicGameState {
 		int mouseY = input.getMouseY();
 		boolean leftButtonPressed = input
 				.isMousePressed(Input.MOUSE_LEFT_BUTTON);
+
 		addEnemy(delta);
 		if (leftButtonPressed) {
 			list.update(mouseX, mouseY);
@@ -558,30 +564,35 @@ public class GamePlayState extends BasicGameState {
 	}
 
 	private void addEnemy(int delta) {
-		BasicEnemy marine = new BasicEnemy(
-				"resources/sprites/Marine/marine.txt", "marine");
+		if (ENEMY_PER_SECOND <= lastEnemy) {
+			BasicEnemy marine = new BasicEnemy(
+					"resources/sprites/Marine/marine.txt", "marine");
 
-		Random randomGenerator = new Random();
+			Random randomGenerator = new Random();
 
-		int row = randomGenerator.nextInt(3);
+			int row = randomGenerator.nextInt(3);
 
-		if (entities[row][5] == null) {
-			int x = 0;
-			int y = 0;
-			if (row == 0) {
-				x = 5 * 90 + 135 - marine.getWidth();
-				y = 180 + 90- marine.getHeight();
-			} else if (row == 1) {
-				x = 5 * 90 + 90 - marine.getWidth();
-				y = 180 + 90 * 2 - marine.getHeight();
-			} else if (row == 2) {
-				x = 5 * 90 + 45 - marine.getWidth();
-				y = 180 + 90 * 3 - marine.getHeight();
+			if (entities[row][5] == null) {
+				int x = 0;
+				int y = 0;
+				if (row == 0) {
+					x = 5 * 90 + 135 - marine.getWidth();
+					y = 180 + 90 - marine.getHeight();
+				} else if (row == 1) {
+					x = 5 * 90 + 90 - marine.getWidth();
+					y = 180 + 90 * 2 - marine.getHeight();
+				} else if (row == 2) {
+					x = 5 * 90 + 45 - marine.getWidth();
+					y = 180 + 90 * 3 - marine.getHeight();
+				}
+				marine.setX(x);
+				marine.setY(y);
+				entities[row][5] = marine;
 			}
-			marine.setX(x);
-			marine.setY(y);
-			entities[row][5] = marine;
+			lastEnemy = 0;
+
 		}
+		lastEnemy += delta;
 	}
 
 	/**
