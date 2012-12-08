@@ -3,7 +3,7 @@ URL: resources/sprites/Franky/FrankyStand.png
 DAMAGE: 0
 MONEY: 0
 COST: 30
-FRAMES: 7
+FRAMES: 4
 FRAME_WIDTH: 90
 FRAME_HEIGHT: 90
 TIME: 150
