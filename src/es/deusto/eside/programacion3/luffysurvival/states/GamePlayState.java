@@ -468,6 +468,8 @@ public class GamePlayState extends BasicGameState {
 		for (int i = 0; i < entities.length; i++) {
 			for (int j = 0; j < entities[i].length; j++) {
 				if (entities[i][j] != null) {
+					Log.error("Coordenada x: " + i
+							+ " Coordenada y: " + j);
 					entities[i][j].draw();
 				}
 			}
@@ -531,15 +533,10 @@ public class GamePlayState extends BasicGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sb, int delta)
 			throws SlickException {
-		/*
-		 * for(int i=1;i<enemi.size();i++){ if(enemi.get(i).getX()<=0){
-		 * BasicEnemy temp = enemi.get(i); temp = null; } else{
-		 * enemi.get(i).setX(enemi.get(i).getX()-1);
-		 * 
-		 * } }
-		 */
+
 
 		if (this.lastMovement > 0 && this.lastMovement >= ENEMY_PER_SECOND / 2) {
+		
 			lastMovement = ENEMY_PER_SECOND / 2 - lastMovement;
 			for (int i = 0; i < entities.length; i++) {
 				for (int j = 0; j < entities[i].length; j++) {
@@ -571,6 +568,7 @@ public class GamePlayState extends BasicGameState {
 						
 						
 						entities[i][j].setX(x);
+						((BasicEnemy)entities[i][j]).setAnimation(2);
 					}
 				}
 
@@ -592,6 +590,7 @@ public class GamePlayState extends BasicGameState {
 									x = (j - 1 )* 90 + 45 - entities[i][j].getWidth();
 								}
 								entities[i][j].setX(x);
+								((BasicEnemy)entities[i][j]).setAnimation(1);
 								entities[i][j - 1] = entities[i][j];
 								entities[i][j] = null;
 					}

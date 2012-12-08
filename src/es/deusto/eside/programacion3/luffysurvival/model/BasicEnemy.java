@@ -13,8 +13,11 @@ import org.newdawn.slick.SpriteSheet;
 
 public class BasicEnemy extends BasicCharacter{
 	
+	private Animation stopAnimation;
+	
 	public BasicEnemy(String config, String name) {
 		super(config,name);
+		
 	}
 	protected void parse(String propertiesFile) {
 		File file = new File(propertiesFile);
@@ -39,8 +42,11 @@ public class BasicEnemy extends BasicCharacter{
 					if (line.equals("STAND")){					
 						loadStandState(properties);
 					}
-					else{		
+					else if(line.equals("ATTACK")){		
 						loadAttackState(properties);
+					}
+					else{
+						loadStopState(properties);
 					}
 					
 			}
@@ -58,4 +64,64 @@ public class BasicEnemy extends BasicCharacter{
 		}
 	
 	}
+	private void loadStopState(String[] properties) {
+		String spriteSheetUrl = "";
+		int damage, money, cost, frames = 0, frameWidth = 0, frameHeight = 0, time = 0;
+		Color alpha = null;
+		for (String property : properties) {
+			String[] tokens = property.split(":");
+			if (tokens[0].equalsIgnoreCase("URL")) {
+				spriteSheetUrl = tokens[1].trim();
+			} else if (tokens[0].equalsIgnoreCase("DAMAGE")) {
+				damage = Integer.parseInt(tokens[1].trim());
+			}else if (tokens[0].equalsIgnoreCase("Money")) {
+				money = Integer.parseInt(tokens[1].trim());
+			}else if (tokens[0].equalsIgnoreCase("Cost")) {
+				cost = Integer.parseInt(tokens[1].trim());
+			}else if (tokens[0].equalsIgnoreCase("frames")) {
+				frames = Integer.parseInt(tokens[1].trim());
+			}else if (tokens[0].equalsIgnoreCase("FRAME_WIDTH")) {
+				frameWidth = Integer.parseInt(tokens[1].trim());
+			}else if (tokens[0].equalsIgnoreCase("FRAME_HEIGHT")) {
+				frameHeight = Integer.parseInt(tokens[1].trim());
+			}else if (tokens[0].equalsIgnoreCase("time")) {
+				time  = Integer.parseInt(tokens[1].trim());
+			} else if (tokens[0].equalsIgnoreCase("COLOR_ALPHA")) {
+				String[] colorComponents = tokens[1].split(",");
+				int r = Integer.parseInt(colorComponents[0].trim());
+				int g = Integer.parseInt(colorComponents[1].trim());
+				int b = Integer.parseInt(colorComponents[2].trim());
+				alpha = new Color(r, g, b);
+			}
+		} 
+		SpriteSheet sheet;
+		try {
+			sheet = new SpriteSheet(
+					spriteSheetUrl, frameWidth, frameHeight,  alpha);
+			stopAnimation = new Animation();
+			this.stopAnimation.setAutoUpdate(true);
+			for (int i = 0; i < frames; i++) {
+				this.stopAnimation.addFrame(sheet.getSprite(i, 0), time);
+			}
+	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public Animation getStopAnimation() {
+		return stopAnimation;
+	}
+
+	public void setAnimation(int i){
+		if (i==1){
+			setCurrent(stopAnimation);
+		}
+		else if (i==2){
+			setCurrent(standAnimation);
+		}
+		else{
+			setCurrent(getAttackAnimation());
+		}
+	}
 }
+

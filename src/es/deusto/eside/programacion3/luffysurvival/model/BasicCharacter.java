@@ -69,6 +69,8 @@ public class BasicCharacter implements Entity {
 	public float getY() {
 		return y;
 	}
+	
+
 
 	public void setY(float y) {
 		this.y = y;
@@ -245,6 +247,18 @@ public class BasicCharacter implements Entity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public Animation getCurrent() {
+		return current;
+	}
+
+	public void setStandAnimation(Animation standAnimation) {
+		this.standAnimation = standAnimation;
+	}
+
+	public void setAttackAnimation(Animation attackAnimation) {
+		this.attackAnimation = attackAnimation;
 	}
 
 	@Override
