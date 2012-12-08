@@ -535,42 +535,15 @@ public class GamePlayState extends BasicGameState {
 
 		if (this.lastMovement > 0 && this.lastMovement >= ENEMY_PER_SECOND / 2) {
 			lastMovement = ENEMY_PER_SECOND / 2 - lastMovement;
-
-			for (int i = 0; i < entities.length; i++) {
-				for (int j = 0; j < entities[i].length; j++) {
-					if (j - 1  >= 0 && entities[i][j - 1] == null && entities[i][j] != null && 
-					entities[i][j] instanceof BasicEnemy){
-						entities[i][j - 1] = entities[i][j];
-						entities[i][j] = null;
-
-					}
-				}
-			}
+			
+		
 		}
 		if (lastMovement < 0 && lastMovement > -ENEMY_PER_SECOND / 2) {
 			lastMovement -= delta;
 			for (int i = 0; i < entities.length; i++) {
 				for (int j = 0; j < entities[i].length; j++) {
-					if (entities[i][j] != null  && 
+					if (j - 1  >= 0 && entities[i][j - 1] == null && entities[i][j] != null && 
 							entities[i][j] instanceof BasicEnemy) {
-						int x;
-						if (i == 0) {
-							x = j * 90 + 135 - entities[i][j].getWidth();
-						} else if (i == 1) {
-							x = j * 90 + 90 - entities[i][j].getWidth();
-						} else if (i == 2) {
-							x = j * 90 + 45 - entities[i][j].getWidth();
-						}
-					}
-				}
-
-			}
-		} else if (lastMovement < 0) {
-			for (int i = 0; i < entities.length; i++) {
-				for (int j = 0; j < entities[i].length; j++) {
-					if (entities[i][j] != null && 
-							entities[i][j] instanceof BasicEnemy) {
-
 						int x = 0;
 						if (i == 0) {
 							x = j * 90 + 135 - entities[i][j].getWidth();
@@ -579,9 +552,39 @@ public class GamePlayState extends BasicGameState {
 						} else if (i == 2) {
 							x = j * 90 + 45 - entities[i][j].getWidth();
 						}
+						float f = (90f / (ENEMY_PER_SECOND / 2f))* lastMovement;
+						x = (int) (x + f);
+						
+						
 						entities[i][j].setX(x);
 					}
 				}
+
+			}
+		} else if (lastMovement < 0) {
+			for (int i = 0; i < entities.length; i++) {
+				for (int j = 0; j < entities[i].length; j++) {
+					
+					if (j - 1  >= 0 && entities[i][j - 1] == null && entities[i][j] != null && 
+							entities[i][j] instanceof BasicEnemy){
+								
+								
+								int x = 0;
+								if (i == 0) {
+									x = (j - 1 ) * 90 + 135 - entities[i][j].getWidth();
+								} else if (i == 1) {
+									x = (j - 1 ) * 90 + 90 - entities[i][j].getWidth();
+								} else if (i == 2) {
+									x = (j - 1 )* 90 + 45 - entities[i][j].getWidth();
+								}
+								entities[i][j].setX(x);
+								entities[i][j - 1] = entities[i][j];
+								entities[i][j] = null;
+					}
+				}
+				
+				
+				
 
 			}
 			lastMovement = 0;
