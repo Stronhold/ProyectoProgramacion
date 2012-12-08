@@ -135,6 +135,10 @@ public class GamePlayState extends BasicGameState {
 
 	private boolean playerDelete = false;
 
+	private ArrayList<BasicEnemy> enemi;
+
+	private int lastMovement;
+
 	/**
 	 * Constructor
 	 * 
@@ -150,7 +154,9 @@ public class GamePlayState extends BasicGameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sb) throws SlickException {
 		lastEnemy = ENEMY_PER_SECOND;
+		lastMovement = 0;
 		this.map = new TiledMap(MAP_LOCATION);
+		enemi = new ArrayList<BasicEnemy>();
 		// initGUI(gc, sb);
 		initPlayerSelector();
 		initAreaCharacter();
@@ -519,6 +525,71 @@ public class GamePlayState extends BasicGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sb, int delta)
 			throws SlickException {
+		/*
+		 * for(int i=1;i<enemi.size();i++){ if(enemi.get(i).getX()<=0){
+		 * BasicEnemy temp = enemi.get(i); temp = null; } else{
+		 * enemi.get(i).setX(enemi.get(i).getX()-1);
+		 * 
+		 * } }
+		 */
+
+		if (this.lastMovement > 0 && this.lastMovement >= ENEMY_PER_SECOND / 2) {
+			lastMovement = ENEMY_PER_SECOND / 2 - lastMovement;
+
+			for (int i = 0; i < entities.length; i++) {
+				for (int j = 0; j < entities[i].length; j++) {
+					if (j - 1  >= 0 && entities[i][j - 1] == null && entities[i][j] != null && 
+					entities[i][j] instanceof BasicEnemy){
+						entities[i][j - 1] = entities[i][j];
+						entities[i][j] = null;
+
+					}
+				}
+			}
+		}
+		if (lastMovement < 0 && lastMovement > -ENEMY_PER_SECOND / 2) {
+			lastMovement -= delta;
+			for (int i = 0; i < entities.length; i++) {
+				for (int j = 0; j < entities[i].length; j++) {
+					if (entities[i][j] != null  && 
+							entities[i][j] instanceof BasicEnemy) {
+						int x;
+						if (i == 0) {
+							x = j * 90 + 135 - entities[i][j].getWidth();
+						} else if (i == 1) {
+							x = j * 90 + 90 - entities[i][j].getWidth();
+						} else if (i == 2) {
+							x = j * 90 + 45 - entities[i][j].getWidth();
+						}
+					}
+				}
+
+			}
+		} else if (lastMovement < 0) {
+			for (int i = 0; i < entities.length; i++) {
+				for (int j = 0; j < entities[i].length; j++) {
+					if (entities[i][j] != null && 
+							entities[i][j] instanceof BasicEnemy) {
+
+						int x = 0;
+						if (i == 0) {
+							x = j * 90 + 135 - entities[i][j].getWidth();
+						} else if (i == 1) {
+							x = j * 90 + 90 - entities[i][j].getWidth();
+						} else if (i == 2) {
+							x = j * 90 + 45 - entities[i][j].getWidth();
+						}
+						entities[i][j].setX(x);
+					}
+				}
+
+			}
+			lastMovement = 0;
+		} else {
+
+			lastMovement += delta;
+		}
+
 		Input input = gc.getInput();
 		enterInput(input);
 		int mouseX = input.getMouseX();
@@ -561,13 +632,14 @@ public class GamePlayState extends BasicGameState {
 				}
 			}
 		}
+
 	}
 
 	private void addEnemy(int delta) {
 		if (ENEMY_PER_SECOND <= lastEnemy) {
 			BasicEnemy marine = new BasicEnemy(
 					"resources/sprites/Marine/marine.txt", "marine");
-
+			enemi.add(marine);
 			Random randomGenerator = new Random();
 
 			int row = randomGenerator.nextInt(3);

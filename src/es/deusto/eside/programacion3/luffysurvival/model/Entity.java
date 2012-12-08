@@ -13,5 +13,9 @@ public interface Entity {
 	 */
 	void draw();
 	void update(boolean pressed, int x, int y, int delta);
+	int getWidth();
+	int getHeight();
+	void setX(final int x);
+	void setY(final int y);
 
 }
