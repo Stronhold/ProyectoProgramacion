@@ -88,6 +88,7 @@ public class Icon {
 		
 		return result;
 	}
+	
 	/**
 	 * Dibuja
 	 * @param f coordenada

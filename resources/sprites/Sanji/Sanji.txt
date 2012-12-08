@@ -9,7 +9,7 @@ FRAME_HEIGHT: 90
 TIME: 150
 COLOR_ALPHA: 0,74,130
 ATTACK
-URL: resources/sprites/Sanji/NicoRobinAttack.png
+URL: resources/sprites/NicoRobin/NicoRobinAttack.png
 DAMAGE: 2
 MONEY: 0
 COST: 0
@@ -19,7 +19,7 @@ FRAME_HEIGHT: 90
 TIME: 150
 COLOR_ALPHA: 0,74,130
 ATTACK_SPECIAL
-URL: resources/sprites/Sanji/NicoRobinAttack.png
+URL: resources/sprites/NicoRobin/NicoRobinAttack.png
 DAMAGE: 4
 MONEY: 0
 COST: 30

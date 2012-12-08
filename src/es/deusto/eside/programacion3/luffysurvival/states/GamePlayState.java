@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.GL11;
@@ -18,6 +21,7 @@ import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
+import org.newdawn.slick.util.Log;
 
 import TWLSlick.TWLInputAdapter;
 import de.matthiasmann.twl.ColumnLayout;
@@ -30,7 +34,9 @@ import es.deusto.eside.programacion3.luffysurvival.LuffySurvival;
 import es.deusto.eside.programacion3.luffysurvival.engine.ContainerList;
 import es.deusto.eside.programacion3.luffysurvival.engine.Icon;
 import es.deusto.eside.programacion3.luffysurvival.engine.IconClickListener;
+import es.deusto.eside.programacion3.luffysurvival.engine.ImageClickListener;
 import es.deusto.eside.programacion3.luffysurvival.model.BasicCharacter;
+import es.deusto.eside.programacion3.luffysurvival.model.BasicEnemy;
 import es.deusto.eside.programacion3.luffysurvival.model.Entity;
 import es.deusto.eside.programacion3.luffysurvival.model.MainCharacter;
 
@@ -125,7 +131,7 @@ public class GamePlayState extends BasicGameState {
 	 */
 	private HashMap<String, MainCharacter> charactersPlaced;
 
-	private Icon delete;
+	private boolean playerDelete = false;
 	
 	/**
 	 * Constructor
@@ -133,11 +139,6 @@ public class GamePlayState extends BasicGameState {
 	 */
 	public GamePlayState(int ordinal) {
 		this.stateId = ordinal;
-	}
-
-	private void initEnemies(){
-		enemyList = new ArrayList<MainCharacter>();
-		enemyList.add(new MainCharacter("resources/sprites/Marine/marine.txt", "Marine"));
 	}
 	
 	@Override
@@ -147,7 +148,6 @@ public class GamePlayState extends BasicGameState {
 		initPlayerSelector();
 		initAreaCharacter();
 		initPlayableCharacters();
-		initEnemies();
 		entities = new Entity[3][6];
 		for (int i = 0; i < ROWS; i++)
 			for (int j = 0; j < COLUMNS; j++)
@@ -166,10 +166,52 @@ public class GamePlayState extends BasicGameState {
 		charactersPlaced.put("Sanji", new MainCharacter("resources/sprites/Sanji/Sanji.txt", "Sanji"));
 		charactersPlaced.put("Chopper", new MainCharacter("resources/sprites/Chopper/Chopper.txt", "Chopper"));
 		charactersPlaced.put("Robin", new MainCharacter("resources/sprites/NicoRobin/Nico.txt", "Robin"));
-		charactersPlaced.put("Franky", new MainCharacter("resources/sprites/Brook/Brook.txt", "Brook"));
-		charactersPlaced.put("Brook", new MainCharacter("resources/sprites/Franky/Franky.txt", "Franky"));
+		charactersPlaced.put("Franky", new MainCharacter("resources/sprites/Franky/Franky.txt", "Franky"));
+		charactersPlaced.put("Brook", new MainCharacter("resources/sprites/Brook/Brook.txt", "Brook" ));
+		addEventsPlayableCharacters();
 	}
 	
+
+	private void addEventsPlayableCharacters() {
+		Set<Entry<String, MainCharacter>> keyValue = charactersPlaced.entrySet();
+		for (Entry<String, MainCharacter> e : keyValue) {
+		
+			e.getValue().addImageClickListenerAttack(new ImageClickListener() {
+				
+				@Override
+				public void onClick(Object sender) {
+					
+					MainCharacter temp = (MainCharacter) sender;
+					if(temp.isFinalAttackReady()){
+						temp.setCurrent(temp.getFinalAttackAnimation());
+						temp.setContextMenu(false);
+						temp.setFinalAttackReady(false);					
+					}
+					
+				}
+			});
+			
+			e.getValue().addImageClickListenerDelete(new ImageClickListener() {
+				
+				@Override
+				public void onClick(Object sender) {
+					Log.error("Personaje borrado");
+					MainCharacter temp = (MainCharacter) sender;
+					charactersPlaced.put(temp.getName(), temp);
+					temp.getX();
+					temp.getY();
+					for(int i=0;i<entities.length;i++){
+						for(int j=0;j<entities[i].length;j++){
+							if(entities[i][j]==temp){
+								entities[i][j] = null;
+								return;
+							}
+						}
+					}
+				}
+			});
+		}
+	}
 
 	/**
 	 * Inicializa la selección de personajes
@@ -385,6 +427,7 @@ public class GamePlayState extends BasicGameState {
 			drawAreaCharacter(g);			 
 		}
 		
+		
 		for (int i = 0; i < entities.length; i++) {
 			for (int j =0; j < entities[i].length; j++){
 				if (entities[i][j] != null) {
@@ -455,6 +498,7 @@ public class GamePlayState extends BasicGameState {
 		int mouseX = input.getMouseX();
 		int mouseY = input.getMouseY();
 		boolean leftButtonPressed = input.isMousePressed(Input.MOUSE_LEFT_BUTTON);
+		addEnemy(delta);
 		if (leftButtonPressed) {
 			list.update(mouseX, mouseY);
 		
@@ -488,6 +532,12 @@ public class GamePlayState extends BasicGameState {
 		}
 	}
 	
+	private void addEnemy(int delta) {
+		BasicEnemy marine = new BasicEnemy("resources/sprites/Marine/marine.txt", "marine");
+		entities[2][4] = marine;
+		
+	}
+
 	/**
 	 * Coloca el personaje
 	 * @param selectedPlayableCharacter2 personaje elegido para colocar
@@ -515,6 +565,8 @@ public class GamePlayState extends BasicGameState {
 		
 	}
 
+	
+	
 	@Override
 	public int getID() {
 		return this.stateId;

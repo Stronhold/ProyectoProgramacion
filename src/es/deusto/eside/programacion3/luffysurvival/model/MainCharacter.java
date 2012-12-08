@@ -6,18 +6,23 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import es.deusto.eside.programacion3.luffysurvival.engine.Icon;
+import es.deusto.eside.programacion3.luffysurvival.engine.IconClickListener;
+import es.deusto.eside.programacion3.luffysurvival.engine.ImageClickListener;
 import es.deusto.eside.programacion3.luffysurvival.states.OpeningState;
 
 /**
@@ -28,8 +33,14 @@ import es.deusto.eside.programacion3.luffysurvival.states.OpeningState;
  */
 public class MainCharacter extends BasicCharacter {
 	private Logger log = LoggerFactory.getLogger(BasicCharacter.class);
-	private Icon delete;
-	private Icon superAttack;
+	private Image delete;
+	private Image superAttack;
+	private List<ImageClickListener> listenerDelete;
+	private List<ImageClickListener> listenerAttack;
+	private static final int  X_POSITION = 10;
+	private static final int Y_POSITION_DELETE = 60;
+	private static final int Y_POSITION_ATTACK = 20;
+	private boolean finalAttackReady;
 
 
 	/**
@@ -49,10 +60,39 @@ public class MainCharacter extends BasicCharacter {
 	 */
 	public MainCharacter(String config, String name) {
 		super(config, name);
+		listenerDelete = new ArrayList<ImageClickListener>();
+		listenerAttack = new ArrayList<ImageClickListener>();
 		contextMenu = false;
-		delete = new Icon("resources/image/delete.png");
-		superAttack = new Icon("resources/image/final1.png");
+		finalAttackReady = true;
+		try {
+			delete = new Image("resources/image/delete.png");
+			delete=delete.getScaledCopy(20, 20);
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
+		try {
+			superAttack = new Image("resources/image/final.png");
+			superAttack = superAttack.getScaledCopy(20, 20);
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 	}
+
+	
+	public Animation getFinalAttackAnimation() {
+		return finalAttackAnimation;
+	}
+
+
+	public boolean isFinalAttackReady() {
+		return finalAttackReady;
+	}
+
+
+	public void setFinalAttackReady(boolean finalAttackReady) {
+		this.finalAttackReady = finalAttackReady;
+	}
+
 
 	/**
 	 * Metodo que lee linea por linea un fichero
@@ -150,64 +190,87 @@ public class MainCharacter extends BasicCharacter {
 			for (int i = 0; i < frames; i++) {
 				this.finalAttackAnimation.addFrame(sheet.getSprite(i, 0), time);
 			}
-
+			this.finalAttackAnimation.addFrame(this.finalAttackAnimation.getImage(this.getFinalAttackAnimation().getFrameCount() - 1), 100);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
+	//x e y son las coordenadas en las que se ha pinchado
 	@Override
-	public void update(boolean pressed, int x, int y, int delta) {
+	public void update(boolean pressed, int mouseX, int mouseY, int delta) {
 		boolean result = false;
-
+		if (current.equals(finalAttackAnimation) && current.getFrame()==current.getFrameCount()-1) {
+			current=standAnimation;
+			finalAttackAnimation.restart();
+			finalAttackReady = true;
+		}
+		
 		if (pressed) {
-			log.error("X: " + this.x + " Y: " + this.y + " Mouse x: " + x
-					+ " Mouse Y: " + y);
+			log.error("X: " + this.x + " Y: " + this.y + " Mouse x: " + mouseX
+					+ " Mouse Y: " + mouseY);
 			/* Si nos salimos es que no esta dentro */
-			if ( x  <= this.x + current.getCurrentFrame().getWidth()
-					&& x >=this. x &&
-					y >= this.y &&
-					 y <= this.y + current.getCurrentFrame().getHeight()) {
+			if ( mouseX  <= this.x + current.getCurrentFrame().getWidth()
+					&& mouseX >=this. x &&
+					mouseY >= this.y &&
+					 mouseY <= this.y + current.getCurrentFrame().getHeight()) {
 				Color color = current.getCurrentFrame().getColor(
-						(int) (x - this.x), (int) (y - this.y));
+						(int) (mouseX - this.x), (int) (mouseY - this.y));
 				log.error("Dentro de " + this.getName());
 				if (color.a == 1) {
 					log.error("Clicked");
 					contextMenu = true;
 				}
 			}
+			//Delete image
+			if (mouseX <= this.x + current.getCurrentFrame().getWidth() - X_POSITION + delete.getWidth() && mouseX >=this.x + current.getCurrentFrame().getWidth() - X_POSITION &&
+					mouseY<= this.y + Y_POSITION_DELETE + delete.getHeight() && mouseY>= this.y + Y_POSITION_DELETE){
+				for (ImageClickListener l : listenerDelete) {
+					l.onClick(this);
+				}
+				result = true;
+			}
+			//Super attack image
+			if (mouseX <= this.x + current.getCurrentFrame().getWidth() - X_POSITION + delete.getWidth() && mouseX >=this.x + current.getCurrentFrame().getWidth() - X_POSITION &&
+					mouseY <= this.y + Y_POSITION_ATTACK + delete.getHeight() && mouseY >= this.y + Y_POSITION_ATTACK){
+				for (ImageClickListener l : listenerAttack) {
+					l.onClick(this);
+				}
+				result = true;
+			}
 		}
+		
+		
 		
 	}
 	
+	public Image getSuperAttack() {
+		return superAttack;
+	}
+
 	@Override
 	public void draw() {
 		current.draw(x, y);
 		if(contextMenu){
-			delete.draw(x-10, y-30);
-			superAttack.draw(x+40, y+10);
+			delete.draw(x+current.getCurrentFrame().getWidth() - X_POSITION , y+Y_POSITION_DELETE);	
+			superAttack.draw(x + current.getCurrentFrame().getWidth() -  X_POSITION, y+Y_POSITION_ATTACK);
 		}
 	}
-
-	public boolean isContextMenu() {
-		return contextMenu;
+	
+	public void addImageClickListenerDelete(final ImageClickListener l) {
+		listenerDelete.add(l);		
 	}
+	
+	public void addImageClickListenerAttack(final ImageClickListener l){
+		listenerAttack.add(l);
+	}
+
 
 	public void setContextMenu(boolean contextMenu) {
 		this.contextMenu = contextMenu;
 	}
-
-	public Icon getDelete() {
-		return delete;
-	}
-
-	public Icon getSuperAttack() {
-		return superAttack;
-	}
-
-	public Animation getFinalAttackAnimation() {
-		return finalAttackAnimation;
-	}
+	
+	
+	
 	
 
 }
