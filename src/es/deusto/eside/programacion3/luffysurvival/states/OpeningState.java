@@ -56,6 +56,10 @@ import es.deusto.eside.programacion3.luffysurvival.util.PlatformUtils;
  */
 public class OpeningState extends BasicGameState implements RenderCallback {
 
+	/**
+	 * Nos indica si es la primera vez que pulsa una tecla
+	 */
+	private static boolean firstTime = true;
 
 	/**
 	 * VIDEO_FILE: dirección del video
@@ -98,11 +102,6 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 	 * isFirstTime: indica si es la primera vez que se abre
 	 */
 	private boolean isFirstTime;
-	
-	/**
-	 * logger: variable para logear. 
-	 */
-	private final Logger logger = LoggerFactory.getLogger(OpeningState.class);
 	
 
 	/**
@@ -257,7 +256,10 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 
 			@Override
 			public void mouseReleased(int arg0, int arg1, int arg2) {
-				sb.enterState(GameState.PREMAIN_MENU_STATE.ordinal(),  new FadeOutTransition(), new FadeInTransition());
+				if(firstTime){
+					sb.enterState(GameState.PREMAIN_MENU_STATE.ordinal(),  new FadeOutTransition(), new FadeInTransition());
+					firstTime=false;
+				}
 			}
 
 			@Override
@@ -314,8 +316,10 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 
 			@Override
 			public void keyReleased(int arg0, char arg1) {
-				sb.enterState(GameState.PREMAIN_MENU_STATE.ordinal(),  new FadeOutTransition(), new FadeInTransition());
-
+				if(firstTime){
+					sb.enterState(GameState.PREMAIN_MENU_STATE.ordinal(),  new FadeOutTransition(), new FadeInTransition());
+					firstTime=false;
+				}
 			}
 
 			@Override

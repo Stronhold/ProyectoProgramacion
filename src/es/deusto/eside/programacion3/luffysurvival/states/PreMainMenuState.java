@@ -30,6 +30,10 @@ import es.deusto.eside.programacion3.luffysurvival.engine.FadeOutAnimation;
 public class PreMainMenuState extends BasicGameState {
 
 	/**
+	 * Nos indica si es la primera vez que se pulsa la tecla
+	 */
+	private static boolean isFirstTime = true;
+	/**
 	 * DURATION: milisegundos
 	 */
 	private static final int DURATION = 4000;
@@ -165,7 +169,6 @@ public class PreMainMenuState extends BasicGameState {
 				sky.addFrame(temp.getSubImage(373, 0, 177, 129), SKY_DURATION);
 			}
 		} catch (SlickException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -237,9 +240,11 @@ public class PreMainMenuState extends BasicGameState {
 
 			@Override
 			public void keyReleased(int arg0, char arg1) {
-				sb.enterState(GameState.MAIN_MENU_STATE.ordinal(),
-						new FadeOutTransition(), new FadeInTransition());
-
+				if(isFirstTime){
+					sb.enterState(GameState.MAIN_MENU_STATE.ordinal(),
+							new FadeOutTransition(), new FadeInTransition());
+					isFirstTime = false;
+				}
 			}
 
 			@Override
@@ -280,8 +285,11 @@ public class PreMainMenuState extends BasicGameState {
 
 			@Override
 			public void mouseReleased(int arg0, int arg1, int arg2) {
-				sb.enterState(GameState.MAIN_MENU_STATE.ordinal(),
-						new FadeOutTransition(), new FadeInTransition());
+				if(isFirstTime){
+					sb.enterState(GameState.MAIN_MENU_STATE.ordinal(),
+							new FadeOutTransition(), new FadeInTransition());
+					isFirstTime = false;
+				}
 			}
 
 			@Override
