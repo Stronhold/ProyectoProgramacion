@@ -37,9 +37,19 @@ public class BasicCharacter implements Entity {
 	 * Nombre del personaje del juego
 	 */
 	protected String name;
+	
+	protected int money, cost, costAttack;
 
 	public BasicCharacter() {
 		super();
+	}
+
+	public int getMoney() {
+		return money;
+	}
+
+	public int getCost() {
+		return cost;
 	}
 
 	public String getName() {
@@ -125,6 +135,7 @@ public class BasicCharacter implements Entity {
 					else if(line.equals("ATTACK")){
 						for(int i=0;i<properties.length;i++)
 							properties[i] = dis.readLine();
+						loadAttackState(properties);
 					}
 					else{
 						for(int i=0;i<properties.length;i++)
@@ -154,7 +165,7 @@ public class BasicCharacter implements Entity {
 	protected void loadStandState(final String[] properties) {
 	
 		String spriteSheetUrl = "";
-		int damage, money, cost, frames = 0, frameWidth = 0, frameHeight = 0, time = 0;
+		int damage, money, frames = 0, frameWidth = 0, frameHeight = 0, time = 0;
 		Color alpha = null;
 		for (String property : properties) {
 			String[] tokens = property.split(":");
@@ -206,7 +217,7 @@ public class BasicCharacter implements Entity {
 	protected void loadAttackState(final String[] properties) {
 	
 		String spriteSheetUrl = "";
-		int damage, money, cost, frames = 0, frameWidth = 0, frameHeight = 0, time = 0;
+		int damage, frames = 0, frameWidth = 0, frameHeight = 0, time = 0;
 		Color alpha = null;
 		for (String property : properties) {
 			String[] tokens = property.split(":");
@@ -216,8 +227,7 @@ public class BasicCharacter implements Entity {
 				damage = Integer.parseInt(tokens[1].trim());
 			}else if (tokens[0].equalsIgnoreCase("Money")) {
 				money = Integer.parseInt(tokens[1].trim());
-			}else if (tokens[0].equalsIgnoreCase("Cost")) {
-				cost = Integer.parseInt(tokens[1].trim());
+				costAttack = Integer.parseInt(tokens[1].trim());
 			}else if (tokens[0].equalsIgnoreCase("frames")) {
 				frames = Integer.parseInt(tokens[1].trim());
 			}else if (tokens[0].equalsIgnoreCase("FRAME_WIDTH")) {

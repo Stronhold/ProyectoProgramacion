@@ -35,7 +35,7 @@ public class MainCharacter extends BasicCharacter {
 	private static final int Y_POSITION_DELETE = 60;
 	private static final int Y_POSITION_ATTACK = 20;
 	private boolean finalAttackReady;
-	private int cost;
+	private int costSuper;
 
 
 	/**
@@ -73,10 +73,7 @@ public class MainCharacter extends BasicCharacter {
 		}
 	}
 
-	
-	public int getCost() {
-		return cost;
-	}
+
 
 
 	public Animation getFinalAttackAnimation() {
@@ -144,6 +141,11 @@ public class MainCharacter extends BasicCharacter {
 
 	}
 
+	public int getCostSuper() {
+		return costSuper;
+	}
+
+
 	/**
 	 * Carga las propiedades del ataque
 	 * 
@@ -164,7 +166,7 @@ public class MainCharacter extends BasicCharacter {
 			} else if (tokens[0].equalsIgnoreCase("Money")) {
 				money = Integer.parseInt(tokens[1].trim());
 			} else if (tokens[0].equalsIgnoreCase("Cost")) {
-				cost = Integer.parseInt(tokens[1].trim());
+				costSuper = Integer.parseInt(tokens[1].trim());
 			} else if (tokens[0].equalsIgnoreCase("frames")) {
 				frames = Integer.parseInt(tokens[1].trim());
 			} else if (tokens[0].equalsIgnoreCase("FRAME_WIDTH")) {

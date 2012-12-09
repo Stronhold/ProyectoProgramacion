@@ -70,7 +70,7 @@ public class GamePlayState extends BasicGameState {
 	/**
 	 * Dinero
 	 */
-	private int money = 90;
+	private int money = 100;
 	
 	/**
 	 * Mapa del nivel 1
@@ -212,10 +212,12 @@ public class GamePlayState extends BasicGameState {
 				public void onClick(Object sender) {
 
 					MainCharacter temp = (MainCharacter) sender;
-					if (temp.isFinalAttackReady()) {
+					if (temp.isFinalAttackReady() && money >= temp.getCostSuper()) {
+						money = money - temp.getCostSuper();
 						temp.setCurrent(temp.getFinalAttackAnimation());
 						temp.setContextMenu(false);
 						temp.setFinalAttackReady(false);
+						Log.error("Queda: " + money + " doblones");
 					}
 
 				}
@@ -264,7 +266,7 @@ public class GamePlayState extends BasicGameState {
 						if (temp != null) {
 							selectedPlayableCharacter = temp;
 							playerAdd = true;
-							Log.error("Nos queda este dinero: " + money);
+							Log.error("Personaje creado, nos queda este dinero: " + money);
 						}
 					}
 					else{
@@ -512,8 +514,6 @@ public class GamePlayState extends BasicGameState {
 		for (int i = 0; i < entities.length; i++) {
 			for (int j = 0; j < entities[i].length; j++) {
 				if (entities[i][j] != null) {
-					Log.error("Coordenada x: " + i
-							+ " Coordenada y: " + j);
 					entities[i][j].draw();
 				}
 			}
