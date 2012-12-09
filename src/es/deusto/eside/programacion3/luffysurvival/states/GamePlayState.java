@@ -127,16 +127,17 @@ public class GamePlayState extends BasicGameState {
 	 * rectangulos del suelo
 	 */
 	private List<Polygon> polygonList;
+	
 	/**
 	 * Personaje seleccionado para colocar
 	 */
 	private MainCharacter selectedPlayableCharacter;
+	
 	/**
 	 * Contiene los personajes que no se han colocado
 	 */
 	private HashMap<String, MainCharacter> charactersPlaced;
 
-	private boolean playerDelete = false;
 
 	private ArrayList<BasicEnemy> enemi;
 
@@ -397,7 +398,7 @@ public class GamePlayState extends BasicGameState {
 		list.addIcon(brookIcon);
 	}
 
-	/**
+	/*/**
 	 * Inicializa el contenedor
 	 * 
 	 * @param gc
