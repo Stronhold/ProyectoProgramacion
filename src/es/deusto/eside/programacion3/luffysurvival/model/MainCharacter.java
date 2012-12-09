@@ -7,23 +7,17 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import es.deusto.eside.programacion3.luffysurvival.engine.Icon;
-import es.deusto.eside.programacion3.luffysurvival.engine.IconClickListener;
 import es.deusto.eside.programacion3.luffysurvival.engine.ImageClickListener;
-import es.deusto.eside.programacion3.luffysurvival.states.OpeningState;
 
 /**
  * Define a los personajes que se utilizan en el juego
@@ -41,6 +35,7 @@ public class MainCharacter extends BasicCharacter {
 	private static final int Y_POSITION_DELETE = 60;
 	private static final int Y_POSITION_ATTACK = 20;
 	private boolean finalAttackReady;
+	private int cost;
 
 
 	/**
@@ -79,6 +74,11 @@ public class MainCharacter extends BasicCharacter {
 	}
 
 	
+	public int getCost() {
+		return cost;
+	}
+
+
 	public Animation getFinalAttackAnimation() {
 		return finalAttackAnimation;
 	}
@@ -153,7 +153,7 @@ public class MainCharacter extends BasicCharacter {
 	private void loadFinalAttackState(final String[] properties) {
 
 		String spriteSheetUrl = "";
-		int damage, money, cost, frames = 0, frameWidth = 0, frameHeight = 0, time = 0;
+		int damage, money, frames = 0, frameWidth = 0, frameHeight = 0, time = 0;
 		Color alpha = null;
 		for (String property : properties) {
 			String[] tokens = property.split(":");

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -68,9 +67,11 @@ public class GamePlayState extends BasicGameState {
 	 */
 	private int stateId;
 
-	private List<MainCharacter> enemyList;
-
-	private int money = 1000;
+	/**
+	 * Dinero
+	 */
+	private int money = 90;
+	
 	/**
 	 * Mapa del nivel 1
 	 */
@@ -246,6 +247,7 @@ public class GamePlayState extends BasicGameState {
 	 * Inicializa la selección de personajes
 	 */
 	private void initPlayerSelector() {
+		//TO-DO: añadir en este método la modificación de dinero
 		list = new ContainerList();
 		list.setX(0);
 		list.setY(0);
@@ -255,10 +257,18 @@ public class GamePlayState extends BasicGameState {
 			@Override
 			public void onClick() {
 				if (!playerAdd) {
-					MainCharacter temp = charactersPlaced.remove("Luffy");
-					if (temp != null) {
-						selectedPlayableCharacter = temp;
-						playerAdd = true;
+					MainCharacter temp = charactersPlaced.get("Luffy");
+					if(temp != null && money >= temp.getCost()){
+						money = money - temp.getCost();
+						charactersPlaced.remove("Luffy");
+						if (temp != null) {
+							selectedPlayableCharacter = temp;
+							playerAdd = true;
+							Log.error("Nos queda este dinero: " + money);
+						}
+					}
+					else{
+						Log.error("No hay dinero suficiente para el personaje");
 					}
 				}
 			}
@@ -270,11 +280,18 @@ public class GamePlayState extends BasicGameState {
 			@Override
 			public void onClick() {
 				if (!playerAdd) {
-					MainCharacter temp = charactersPlaced.remove("Nami");
-					if (temp != null) {
-						selectedPlayableCharacter = temp;
-						playerAdd = true;
+					MainCharacter temp = charactersPlaced.get("Nami");
+					if(temp != null && money >= temp.getCost()){
+						charactersPlaced.remove("Nami");
+						money = money - temp.getCost();
+						if (temp != null) {
+							selectedPlayableCharacter = temp;
+							playerAdd = true;
+						}
 					}
+				}
+				else{
+					Log.error("No hay dinero suficiente para el personaje");
 				}
 			}
 		});
@@ -286,10 +303,14 @@ public class GamePlayState extends BasicGameState {
 			@Override
 			public void onClick() {
 				if (!playerAdd) {
-					MainCharacter temp = charactersPlaced.remove("Zoro");
-					if (temp != null) {
-						selectedPlayableCharacter = temp;
-						playerAdd = true;
+					MainCharacter temp = charactersPlaced.get("Zoro");
+					if(temp != null && money >= temp.getCost()){
+						charactersPlaced.remove("Zoro");
+						money = money - temp.getCost();
+						if (temp != null) {
+							selectedPlayableCharacter = temp;
+							playerAdd = true;
+						}
 					}
 				}
 			}
@@ -302,10 +323,14 @@ public class GamePlayState extends BasicGameState {
 			@Override
 			public void onClick() {
 				if (!playerAdd) {
-					MainCharacter temp = charactersPlaced.remove("Usopp");
-					if (temp != null) {
-						selectedPlayableCharacter = temp;
-						playerAdd = true;
+					MainCharacter temp = charactersPlaced.get("Usopp");
+					if(temp != null && money >= temp.getCost()){
+						money = money - temp.getCost();
+						charactersPlaced.remove("Usopp");
+						if (temp != null) {
+							selectedPlayableCharacter = temp;
+							playerAdd = true;
+						}
 					}
 				}
 			}
@@ -318,10 +343,14 @@ public class GamePlayState extends BasicGameState {
 			@Override
 			public void onClick() {
 				if (!playerAdd) {
-					MainCharacter temp = charactersPlaced.remove("Sanji");
-					if (temp != null) {
-						selectedPlayableCharacter = temp;
-						playerAdd = true;
+					MainCharacter temp = charactersPlaced.get("Sanji");
+					if(temp != null && money >= temp.getCost()){
+						money = money - temp.getCost();
+						charactersPlaced.remove("Sanji");
+						if (temp != null) {
+							selectedPlayableCharacter = temp;
+							playerAdd = true;
+						}
 					}
 				}
 			}
@@ -335,10 +364,14 @@ public class GamePlayState extends BasicGameState {
 			@Override
 			public void onClick() {
 				if (!playerAdd) {
-					MainCharacter temp = charactersPlaced.remove("Chopper");
-					if (temp != null) {
-						selectedPlayableCharacter = temp;
-						playerAdd = true;
+					MainCharacter temp = charactersPlaced.get("Chopper");
+					if(temp != null && money >= temp.getCost()){
+						money = money - temp.getCost();
+						charactersPlaced.remove("Chopper");
+						if (temp != null) {
+							selectedPlayableCharacter = temp;
+							playerAdd = true;
+						}
 					}
 				}
 			}
@@ -351,11 +384,15 @@ public class GamePlayState extends BasicGameState {
 
 			@Override
 			public void onClick() {
-				if (!playerAdd) {
-					MainCharacter temp = charactersPlaced.remove("Robin");
-					if (temp != null) {
-						selectedPlayableCharacter = temp;
-						playerAdd = true;
+				if (!playerAdd) {		
+					MainCharacter temp = charactersPlaced.get("Robin");
+					if(temp != null && money >= temp.getCost()){
+						money = money - temp.getCost();
+						charactersPlaced.remove("Robin");
+						if (temp != null) {
+							selectedPlayableCharacter = temp;
+							playerAdd = true;
+						}
 					}
 				}
 			}
@@ -368,12 +405,15 @@ public class GamePlayState extends BasicGameState {
 
 			@Override
 			public void onClick() {
-				if (!playerAdd) {
-					MainCharacter temp = charactersPlaced.remove("Franky");
-
-					if (temp != null) {
-						selectedPlayableCharacter = temp;
-						playerAdd = true;
+				if (!playerAdd) {	
+					MainCharacter temp = charactersPlaced.get("Franky");
+					if(temp != null && money >= temp.getCost()){
+						charactersPlaced.remove("Franky");
+						money = money - temp.getCost();
+						if (temp != null) {
+							selectedPlayableCharacter = temp;
+							playerAdd = true;
+						}
 					}
 				}
 			}
@@ -386,11 +426,14 @@ public class GamePlayState extends BasicGameState {
 			@Override
 			public void onClick() {
 				if (!playerAdd) {
-					MainCharacter temp = charactersPlaced.remove("Brook");
-
-					if (temp != null) {
-						selectedPlayableCharacter = temp;
-						playerAdd = true;
+					MainCharacter temp = charactersPlaced.get("Brook");
+					if(temp != null && money >= temp.getCost()){
+						charactersPlaced.remove("Brook");
+						money = money - temp.getCost();
+						if (temp != null) {
+							selectedPlayableCharacter = temp;
+							playerAdd = true;
+						}
 					}
 				}
 			}
