@@ -36,6 +36,110 @@ public class MainCharacter extends BasicCharacter {
 	private static final int Y_POSITION_ATTACK = 20;
 	private boolean finalAttackReady;
 	private int costSuper;
+	private int finalDamage;
+
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (contextMenu ? 1231 : 1237);
+		result = prime * result + costSuper;
+		result = prime * result + ((delete == null) ? 0 : delete.hashCode());
+		result = prime
+				* result
+				+ ((finalAttackAnimation == null) ? 0 : finalAttackAnimation
+						.hashCode());
+		result = prime * result + (finalAttackReady ? 1231 : 1237);
+		result = prime * result + finalDamage;
+		result = prime * result
+				+ ((listenerAttack == null) ? 0 : listenerAttack.hashCode());
+		result = prime * result
+				+ ((listenerDelete == null) ? 0 : listenerDelete.hashCode());
+		result = prime * result + ((log == null) ? 0 : log.hashCode());
+		result = prime * result
+				+ ((superAttack == null) ? 0 : superAttack.hashCode());
+		return result;
+	}
+
+
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof MainCharacter)) {
+			return false;
+		}
+		MainCharacter other = (MainCharacter) obj;
+		if (contextMenu != other.contextMenu) {
+			return false;
+		}
+		if (costSuper != other.costSuper) {
+			return false;
+		}
+		if (delete == null) {
+			if (other.delete != null) {
+				return false;
+			}
+		} else if (!delete.equals(other.delete)) {
+			return false;
+		}
+		if (finalAttackAnimation == null) {
+			if (other.finalAttackAnimation != null) {
+				return false;
+			}
+		} else if (!finalAttackAnimation.equals(other.finalAttackAnimation)) {
+			return false;
+		}
+		if (finalAttackReady != other.finalAttackReady) {
+			return false;
+		}
+		if (finalDamage != other.finalDamage) {
+			return false;
+		}
+		if (listenerAttack == null) {
+			if (other.listenerAttack != null) {
+				return false;
+			}
+		} else if (!listenerAttack.equals(other.listenerAttack)) {
+			return false;
+		}
+		if (listenerDelete == null) {
+			if (other.listenerDelete != null) {
+				return false;
+			}
+		} else if (!listenerDelete.equals(other.listenerDelete)) {
+			return false;
+		}
+		if (log == null) {
+			if (other.log != null) {
+				return false;
+			}
+		} else if (!log.equals(other.log)) {
+			return false;
+		}
+		if (superAttack == null) {
+			if (other.superAttack != null) {
+				return false;
+			}
+		} else if (!superAttack.equals(other.superAttack)) {
+			return false;
+		}
+		return true;
+	}
 
 
 	/**
@@ -53,8 +157,10 @@ public class MainCharacter extends BasicCharacter {
 	 * @param name
 	 *            nombre del personaje
 	 */
+	
 	public MainCharacter(String config, String name) {
 		super(config, name);
+		life = 2;
 		listenerDelete = new ArrayList<ImageClickListener>();
 		listenerAttack = new ArrayList<ImageClickListener>();
 		contextMenu = false;
@@ -71,6 +177,13 @@ public class MainCharacter extends BasicCharacter {
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
+	}
+
+
+
+
+	public int getFinalDamage() {
+		return finalDamage;
 	}
 
 

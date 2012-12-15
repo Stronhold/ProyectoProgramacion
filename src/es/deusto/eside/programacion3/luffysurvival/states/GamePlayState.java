@@ -70,7 +70,7 @@ public class GamePlayState extends BasicGameState {
 	/**
 	 * Dinero
 	 */
-	private int money = 100;
+	private int money = 1000;
 	
 	/**
 	 * Mapa del nivel 1
@@ -143,6 +143,8 @@ public class GamePlayState extends BasicGameState {
 	private ArrayList<BasicEnemy> enemi;
 
 	private int lastMovement;
+	
+	private int time = 0;
 
 	/**
 	 * Constructor
@@ -218,6 +220,42 @@ public class GamePlayState extends BasicGameState {
 						temp.setContextMenu(false);
 						temp.setFinalAttackReady(false);
 						Log.error("Queda: " + money + " doblones");
+						int i = 0;
+						int j=0;
+						boolean found = false;
+						while(i<entities.length && !found){
+							j = 0;
+							while(j<2 && !found){
+								if(temp.equals((MainCharacter) entities[i][j])){
+									found = true;
+								}
+								else{
+									j++;
+								}
+							}
+							if(!found){
+								i++;
+							}
+						}
+						if(i<entities.length){
+							if(j+1<entities[i].length &&
+								entities[i][j+1] != null && entities[i][j+1] instanceof BasicEnemy){
+									BasicEnemy temp1 = (BasicEnemy) entities[i][j+1];
+									temp1.setLife(temp1.getLife()-temp.getFinalDamage());
+									if(temp1.getLife()<=0){
+										temp1 = null;
+									}
+								
+							}
+							if((j+2<entities[i].length) &&
+								entities[i][j+2] != null && entities[i][j+2] instanceof BasicEnemy){
+								BasicEnemy temp1 = (BasicEnemy) entities[i][j+2];
+								temp1.setLife(temp1.getLife() - temp.getFinalDamage());
+								if(temp1.getLife()<=0){
+									temp1 = null;
+								}
+							}
+						}
 					}
 
 				}
@@ -240,6 +278,7 @@ public class GamePlayState extends BasicGameState {
 							}
 						}
 					}
+					
 				}
 			});
 		}
@@ -510,7 +549,8 @@ public class GamePlayState extends BasicGameState {
 		if (playerAdd) {
 			drawAreaCharacter(g);
 		}
-
+		String temp = "€" + money;
+		g.drawString(temp, 500 , 10);
 		for (int i = 0; i < entities.length; i++) {
 			for (int j = 0; j < entities[i].length; j++) {
 				if (entities[i][j] != null) {
@@ -687,6 +727,53 @@ public class GamePlayState extends BasicGameState {
 					if (entities[i][j] != null) {
 						entities[i][j].update(leftButtonPressed, mouseX,
 								mouseY, delta);
+					}
+				}
+			}
+		}
+		time += delta;
+		if(time>1000){
+			time = 0;
+			for(int i=0;i<entities.length;i++){
+				for(int j=0;j<2;j++){
+					if (entities[i][j] instanceof MainCharacter){
+						MainCharacter temp = (MainCharacter) entities[i][j];
+						if((entities[i][j+1] instanceof BasicEnemy) && 
+								temp.getFinalAttackAnimation() != temp.getCurrent() ){
+							BasicEnemy tempEnemy = (BasicEnemy) entities[i][j+1];
+							temp.setCurrent(temp.getAttackAnimation());
+							temp.setLife(temp.getLife() - tempEnemy.getDamageNormalAttack());
+							tempEnemy.setCurrent(tempEnemy.getAttackAnimation());
+							money = money + temp.getMoney();
+							tempEnemy.setLife(tempEnemy.getLife()-temp.getDamageNormalAttack());
+							if(tempEnemy.getLife()<=0){
+								entities[i][j+1]=null;
+							}
+							if(temp.getLife()<=0){
+								entities[i][j] = null;
+							}
+							
+						}
+						else if(entities[i][j+2] instanceof BasicEnemy  && 
+								temp.getFinalAttackAnimation() != temp.getCurrent()){
+							BasicEnemy tempEnemy2 = (BasicEnemy) entities[i][j+2];
+							temp.setCurrent(temp.getAttackAnimation());
+							tempEnemy2.setCurrent(tempEnemy2.getAttackAnimation());
+							money = money + temp.getMoney();
+							if(entities[i][j+1]==null){
+								temp.setLife(temp.getLife() - tempEnemy2.getDamageNormalAttack());
+							}
+							tempEnemy2.setLife(tempEnemy2.getLife()- temp.getDamageNormalAttack());
+							if(tempEnemy2.getLife()<=0){
+								entities[i][j+2]=null;
+							}
+							if(temp.getLife()<=0){
+								entities[i][j] = null;
+							}
+						}
+						else if(temp.getCurrent() != temp.getFinalAttackAnimation()){
+							temp.setCurrent(temp.getStandAnimation());
+						}
 					}
 				}
 			}

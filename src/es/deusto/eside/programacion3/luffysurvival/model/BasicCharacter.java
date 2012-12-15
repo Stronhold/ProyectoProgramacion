@@ -38,14 +38,23 @@ public class BasicCharacter implements Entity {
 	 */
 	protected String name;
 	
-	protected int money, cost, costAttack;
-
+	protected int moneyAttack, cost, costAttack;
+	protected int life;	
+	private int damageNormalAttack;
 	public BasicCharacter() {
 		super();
 	}
 
+	public int getLife() {
+		return life;
+	}
+
+	public void setLife(int life) {
+		this.life = life;
+	}
+
 	public int getMoney() {
-		return money;
+		return moneyAttack;
 	}
 
 	public int getCost() {
@@ -217,16 +226,17 @@ public class BasicCharacter implements Entity {
 	protected void loadAttackState(final String[] properties) {
 	
 		String spriteSheetUrl = "";
-		int damage, frames = 0, frameWidth = 0, frameHeight = 0, time = 0;
+		int  frames = 0, money = 0, frameWidth = 0, frameHeight = 0, time = 0;
 		Color alpha = null;
 		for (String property : properties) {
 			String[] tokens = property.split(":");
 			if (tokens[0].equalsIgnoreCase("URL")) {
 				spriteSheetUrl = tokens[1].trim();
 			} else if (tokens[0].equalsIgnoreCase("DAMAGE")) {
-				damage = Integer.parseInt(tokens[1].trim());
+				damageNormalAttack = Integer.parseInt(tokens[1].trim());
 			}else if (tokens[0].equalsIgnoreCase("Money")) {
-				money = Integer.parseInt(tokens[1].trim());
+				moneyAttack = Integer.parseInt(tokens[1].trim());
+			}else if (tokens[0].equalsIgnoreCase("cost")) {
 				costAttack = Integer.parseInt(tokens[1].trim());
 			}else if (tokens[0].equalsIgnoreCase("frames")) {
 				frames = Integer.parseInt(tokens[1].trim());
@@ -258,6 +268,97 @@ public class BasicCharacter implements Entity {
 			e.printStackTrace();
 		}
 	}
+	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((attackAnimation == null) ? 0 : attackAnimation.hashCode());
+		result = prime * result + cost;
+		result = prime * result + costAttack;
+		result = prime * result + ((current == null) ? 0 : current.hashCode());
+		result = prime * result + damageNormalAttack;
+		result = prime * result + life;
+		result = prime * result + moneyAttack;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((standAnimation == null) ? 0 : standAnimation.hashCode());
+		result = prime * result + Float.floatToIntBits(x);
+		result = prime * result + Float.floatToIntBits(y);
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof BasicCharacter)) {
+			return false;
+		}
+		BasicCharacter other = (BasicCharacter) obj;
+		if (attackAnimation == null) {
+			if (other.attackAnimation != null) {
+				return false;
+			}
+		} else if (!attackAnimation.equals(other.attackAnimation)) {
+			return false;
+		}
+		if (cost != other.cost) {
+			return false;
+		}
+		if (costAttack != other.costAttack) {
+			return false;
+		}
+		if (current == null) {
+			if (other.current != null) {
+				return false;
+			}
+		} else if (!current.equals(other.current)) {
+			return false;
+		}
+		if (damageNormalAttack != other.damageNormalAttack) {
+			return false;
+		}
+		if (life != other.life) {
+			return false;
+		}
+		if (moneyAttack != other.moneyAttack) {
+			return false;
+		}
+		if (name == null) {
+			if (other.name != null) {
+				return false;
+			}
+		} else if (!name.equals(other.name)) {
+			return false;
+		}
+		if (standAnimation == null) {
+			if (other.standAnimation != null) {
+				return false;
+			}
+		} else if (!standAnimation.equals(other.standAnimation)) {
+			return false;
+		}
+		if (Float.floatToIntBits(x) != Float.floatToIntBits(other.x)) {
+			return false;
+		}
+		if (Float.floatToIntBits(y) != Float.floatToIntBits(other.y)) {
+			return false;
+		}
+		return true;
+	}
 
 	public Animation getCurrent() {
 		return current;
@@ -285,6 +386,11 @@ public class BasicCharacter implements Entity {
 	public void setX(int x) {
 		this.x = x;
 	}
+
+	public int getDamageNormalAttack() {
+		return damageNormalAttack;
+	}
+
 
 	@Override
 	public void setY(int y) {

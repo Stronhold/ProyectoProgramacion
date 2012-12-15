@@ -17,6 +17,7 @@ public class BasicEnemy extends BasicCharacter{
 	
 	public BasicEnemy(String config, String name) {
 		super(config,name);
+		life = 6;
 		
 	}
 	protected void parse(String propertiesFile) {
@@ -62,7 +63,43 @@ public class BasicEnemy extends BasicCharacter{
 			e.printStackTrace();
 	
 		}
+	}
 	
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result
+				+ ((stopAnimation == null) ? 0 : stopAnimation.hashCode());
+		return result;
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof BasicEnemy)) {
+			return false;
+		}
+		BasicEnemy other = (BasicEnemy) obj;
+		if (stopAnimation == null) {
+			if (other.stopAnimation != null) {
+				return false;
+			}
+		} else if (!stopAnimation.equals(other.stopAnimation)) {
+			return false;
+		}
+		return true;
 	}
 	private void loadStopState(String[] properties) {
 		String spriteSheetUrl = "";
