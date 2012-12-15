@@ -549,7 +549,7 @@ public class GamePlayState extends BasicGameState {
 		if (playerAdd) {
 			drawAreaCharacter(g);
 		}
-		String temp = "€" + money;
+		String temp = "$" + money;
 		g.drawString(temp, 500 , 10);
 		for (int i = 0; i < entities.length; i++) {
 			for (int j = 0; j < entities[i].length; j++) {
