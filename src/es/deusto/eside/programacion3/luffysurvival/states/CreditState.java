@@ -7,6 +7,8 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+
+import es.deusto.eside.programacion3.luffysurvival.language.Locale;
 /**
  * En esta clase se visualizaran los creditos del juego
  * @author sergio
@@ -45,9 +47,9 @@ public class CreditState extends BasicGameState{
 
 
 	@Override
-	public void render(GameContainer arg0, StateBasedGame arg1, Graphics arg2)
+	public void render(GameContainer arg0, StateBasedGame sb, Graphics g)
 			throws SlickException {
-		// TODO Auto-generated method stub
+		g.drawString(Locale.INSTANCE.getText("Game done with Slick2D"), 100, 100);
 	}
 
 

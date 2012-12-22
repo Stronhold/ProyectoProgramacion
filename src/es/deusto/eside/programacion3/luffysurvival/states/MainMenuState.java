@@ -5,6 +5,7 @@ import java.net.URL;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -183,6 +184,14 @@ public class MainMenuState extends BasicGameState {
 			@Override
 			public void run() {
 				sb.enterState(es.deusto.eside.programacion3.luffysurvival.states.GameState.GAME_PLAY_STATE.ordinal());
+			}
+		});
+		buttonCredits.addCallback(new Runnable() {
+			
+			@Override
+			public void run() {
+				sb.enterState(es.deusto.eside.programacion3.luffysurvival.states.GameState.CREDIT_STATE.ordinal());
+				
 			}
 		});
 	}
