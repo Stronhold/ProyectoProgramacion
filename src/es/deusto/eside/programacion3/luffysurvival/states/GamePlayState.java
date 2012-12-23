@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Polygon;
@@ -62,6 +63,8 @@ public class GamePlayState extends BasicGameState {
 	 * Numero de columnas
 	 */
 	private static final int COLUMNS = 6;
+
+	private static final float CENTER = 176;
 	/**
 	 * Numero del estado del juego
 	 */
@@ -71,7 +74,7 @@ public class GamePlayState extends BasicGameState {
 	 * Dinero
 	 */
 	private int money = 1000;
-	
+
 	/**
 	 * Mapa del nivel 1
 	 */
@@ -121,30 +124,31 @@ public class GamePlayState extends BasicGameState {
 	 * Indica los espacios ya ocupados
 	 */
 	private Entity[][] entities;
-	
+
 	private boolean[][] moveEnable;
 
 	/**
 	 * rectangulos del suelo
 	 */
 	private List<Polygon> polygonList;
-	
+
 	/**
 	 * Personaje seleccionado para colocar
 	 */
 	private MainCharacter selectedPlayableCharacter;
-	
+
 	/**
 	 * Contiene los personajes que no se han colocado
 	 */
 	private HashMap<String, MainCharacter> charactersPlaced;
 
-
 	private ArrayList<BasicEnemy> enemi;
 
 	private int lastMovement;
-	
+
 	private int time = 0;
+	
+	private float y=0;
 
 	/**
 	 * Constructor
@@ -158,8 +162,18 @@ public class GamePlayState extends BasicGameState {
 
 	public int lastEnemy;
 
+	private boolean isGameOver;
+
+	private Image gameOver;
+	
+	private int timeGameOverMovement;
+
+
+
 	@Override
 	public void init(GameContainer gc, StateBasedGame sb) throws SlickException {
+		timeGameOverMovement = 0;
+		y = 0;
 		lastEnemy = ENEMY_PER_SECOND;
 		lastMovement = 0;
 		this.map = new TiledMap(MAP_LOCATION);
@@ -175,6 +189,13 @@ public class GamePlayState extends BasicGameState {
 				entities[i][j] = null;
 				moveEnable[i][j] = true;
 			}
+		gameOver = new Image("resources/image/gameover.png",new Color(4,4,4));
+
+	}
+	
+	@Override
+	public void enter(final GameContainer container, final StateBasedGame sb) {
+		isGameOver = false;
 	}
 
 	/**
@@ -214,44 +235,48 @@ public class GamePlayState extends BasicGameState {
 				public void onClick(Object sender) {
 
 					MainCharacter temp = (MainCharacter) sender;
-					if (temp.isFinalAttackReady() && money >= temp.getCostSuper()) {
+					if (temp.isFinalAttackReady()
+							&& money >= temp.getCostSuper()) {
 						money = money - temp.getCostSuper();
 						temp.setCurrent(temp.getFinalAttackAnimation());
 						temp.setContextMenu(false);
 						temp.setFinalAttackReady(false);
 						Log.error("Queda: " + money + " doblones");
 						int i = 0;
-						int j=0;
+						int j = 0;
 						boolean found = false;
-						while(i<entities.length && !found){
+						while (i < entities.length && !found) {
 							j = 0;
-							while(j<2 && !found){
-								if(temp.equals((MainCharacter) entities[i][j])){
+							while (j < 2 && !found) {
+								if (temp.equals((MainCharacter) entities[i][j])) {
 									found = true;
-								}
-								else{
+								} else {
 									j++;
 								}
 							}
-							if(!found){
+							if (!found) {
 								i++;
 							}
 						}
-						if(i<entities.length){
-							if(j+1<entities[i].length &&
-								entities[i][j+1] != null && entities[i][j+1] instanceof BasicEnemy){
-									BasicEnemy temp1 = (BasicEnemy) entities[i][j+1];
-									temp1.setLife(temp1.getLife()-temp.getFinalDamage());
-									if(temp1.getLife()<=0){
-										temp1 = null;
-									}
-								
+						if (i < entities.length) {
+							if (j + 1 < entities[i].length
+									&& entities[i][j + 1] != null
+									&& entities[i][j + 1] instanceof BasicEnemy) {
+								BasicEnemy temp1 = (BasicEnemy) entities[i][j + 1];
+								temp1.setLife(temp1.getLife()
+										- temp.getFinalDamage());
+								if (temp1.getLife() <= 0) {
+									temp1 = null;
+								}
+
 							}
-							if((j+2<entities[i].length) &&
-								entities[i][j+2] != null && entities[i][j+2] instanceof BasicEnemy){
-								BasicEnemy temp1 = (BasicEnemy) entities[i][j+2];
-								temp1.setLife(temp1.getLife() - temp.getFinalDamage());
-								if(temp1.getLife()<=0){
+							if ((j + 2 < entities[i].length)
+									&& entities[i][j + 2] != null
+									&& entities[i][j + 2] instanceof BasicEnemy) {
+								BasicEnemy temp1 = (BasicEnemy) entities[i][j + 2];
+								temp1.setLife(temp1.getLife()
+										- temp.getFinalDamage());
+								if (temp1.getLife() <= 0) {
 									temp1 = null;
 								}
 							}
@@ -278,7 +303,7 @@ public class GamePlayState extends BasicGameState {
 							}
 						}
 					}
-					
+
 				}
 			});
 		}
@@ -288,7 +313,7 @@ public class GamePlayState extends BasicGameState {
 	 * Inicializa la selección de personajes
 	 */
 	private void initPlayerSelector() {
-		//TO-DO: añadir en este método la modificación de dinero
+		// TO-DO: añadir en este método la modificación de dinero
 		list = new ContainerList();
 		list.setX(0);
 		list.setY(0);
@@ -299,16 +324,16 @@ public class GamePlayState extends BasicGameState {
 			public void onClick() {
 				if (!playerAdd) {
 					MainCharacter temp = charactersPlaced.get("Luffy");
-					if(temp != null && money >= temp.getCost()){
+					if (temp != null && money >= temp.getCost()) {
 						money = money - temp.getCost();
 						charactersPlaced.remove("Luffy");
 						if (temp != null) {
 							selectedPlayableCharacter = temp;
 							playerAdd = true;
-							Log.error("Personaje creado, nos queda este dinero: " + money);
+							Log.error("Personaje creado, nos queda este dinero: "
+									+ money);
 						}
-					}
-					else{
+					} else {
 						Log.error("No hay dinero suficiente para el personaje");
 					}
 				}
@@ -322,7 +347,7 @@ public class GamePlayState extends BasicGameState {
 			public void onClick() {
 				if (!playerAdd) {
 					MainCharacter temp = charactersPlaced.get("Nami");
-					if(temp != null && money >= temp.getCost()){
+					if (temp != null && money >= temp.getCost()) {
 						charactersPlaced.remove("Nami");
 						money = money - temp.getCost();
 						if (temp != null) {
@@ -330,8 +355,7 @@ public class GamePlayState extends BasicGameState {
 							playerAdd = true;
 						}
 					}
-				}
-				else{
+				} else {
 					Log.error("No hay dinero suficiente para el personaje");
 				}
 			}
@@ -345,7 +369,7 @@ public class GamePlayState extends BasicGameState {
 			public void onClick() {
 				if (!playerAdd) {
 					MainCharacter temp = charactersPlaced.get("Zoro");
-					if(temp != null && money >= temp.getCost()){
+					if (temp != null && money >= temp.getCost()) {
 						charactersPlaced.remove("Zoro");
 						money = money - temp.getCost();
 						if (temp != null) {
@@ -365,7 +389,7 @@ public class GamePlayState extends BasicGameState {
 			public void onClick() {
 				if (!playerAdd) {
 					MainCharacter temp = charactersPlaced.get("Usopp");
-					if(temp != null && money >= temp.getCost()){
+					if (temp != null && money >= temp.getCost()) {
 						money = money - temp.getCost();
 						charactersPlaced.remove("Usopp");
 						if (temp != null) {
@@ -385,7 +409,7 @@ public class GamePlayState extends BasicGameState {
 			public void onClick() {
 				if (!playerAdd) {
 					MainCharacter temp = charactersPlaced.get("Sanji");
-					if(temp != null && money >= temp.getCost()){
+					if (temp != null && money >= temp.getCost()) {
 						money = money - temp.getCost();
 						charactersPlaced.remove("Sanji");
 						if (temp != null) {
@@ -406,7 +430,7 @@ public class GamePlayState extends BasicGameState {
 			public void onClick() {
 				if (!playerAdd) {
 					MainCharacter temp = charactersPlaced.get("Chopper");
-					if(temp != null && money >= temp.getCost()){
+					if (temp != null && money >= temp.getCost()) {
 						money = money - temp.getCost();
 						charactersPlaced.remove("Chopper");
 						if (temp != null) {
@@ -425,9 +449,9 @@ public class GamePlayState extends BasicGameState {
 
 			@Override
 			public void onClick() {
-				if (!playerAdd) {		
+				if (!playerAdd) {
 					MainCharacter temp = charactersPlaced.get("Robin");
-					if(temp != null && money >= temp.getCost()){
+					if (temp != null && money >= temp.getCost()) {
 						money = money - temp.getCost();
 						charactersPlaced.remove("Robin");
 						if (temp != null) {
@@ -446,9 +470,9 @@ public class GamePlayState extends BasicGameState {
 
 			@Override
 			public void onClick() {
-				if (!playerAdd) {	
+				if (!playerAdd) {
 					MainCharacter temp = charactersPlaced.get("Franky");
-					if(temp != null && money >= temp.getCost()){
+					if (temp != null && money >= temp.getCost()) {
 						charactersPlaced.remove("Franky");
 						money = money - temp.getCost();
 						if (temp != null) {
@@ -468,7 +492,7 @@ public class GamePlayState extends BasicGameState {
 			public void onClick() {
 				if (!playerAdd) {
 					MainCharacter temp = charactersPlaced.get("Brook");
-					if(temp != null && money >= temp.getCost()){
+					if (temp != null && money >= temp.getCost()) {
 						charactersPlaced.remove("Brook");
 						money = money - temp.getCost();
 						if (temp != null) {
@@ -482,13 +506,12 @@ public class GamePlayState extends BasicGameState {
 		list.addIcon(brookIcon);
 	}
 
-	/*/**
-	 * Inicializa el contenedor
+	/*
+	 * /** Inicializa el contenedor
 	 * 
-	 * @param gc
-	 *            ventana
-	 * @param sb
-	 *            estado del juego
+	 * @param gc ventana
+	 * 
+	 * @param sb estado del juego
 	 */
 	private void initGUI(final GameContainer gc, final StateBasedGame sb) {
 		initTWL(gc);
@@ -550,13 +573,24 @@ public class GamePlayState extends BasicGameState {
 			drawAreaCharacter(g);
 		}
 		String temp = "$" + money;
-		g.drawString(temp, 500 , 10);
+		g.drawString(temp, 500, 10);
 		for (int i = 0; i < entities.length; i++) {
 			for (int j = 0; j < entities[i].length; j++) {
 				if (entities[i][j] != null) {
 					entities[i][j].draw();
 				}
 			}
+		}
+
+		if (isGameOver) {
+			gameOver.draw(CENTER,y);
+		}
+		if(timeGameOverMovement>=1000){
+			Log.error("Tiempo" + timeGameOverMovement);
+			y+= 35;
+			
+			gameOver.draw(CENTER, y);
+			timeGameOverMovement = 0;
 		}
 	}
 
@@ -617,198 +651,223 @@ public class GamePlayState extends BasicGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sb, int delta)
 			throws SlickException {
-
-
-		if (this.lastMovement > 0 && this.lastMovement >= ENEMY_PER_SECOND / 2) {
-		
-			lastMovement = ENEMY_PER_SECOND / 2 - lastMovement;
-			for (int i = 0; i < entities.length; i++) {
-				for (int j = 0; j < entities[i].length; j++) {
-					moveEnable[i][j] = (entities[i][j] == null) ? true : false;
-					if (j > 0 && moveEnable[i][j-1] == true && entities[i][j] instanceof BasicEnemy) {
-						moveEnable[i][j] = true;
-					}
-				}
-			}
-			addEnemy();
-
+		if(isGameOver && y<140){
+			timeGameOverMovement += timeGameOverMovement + delta;
 		}
-		if (lastMovement < 0 && lastMovement > -ENEMY_PER_SECOND / 2) {
-			lastMovement -= delta;
-			for (int i = 0; i < entities.length; i++) {
-				for (int j = 0; j < entities[i].length; j++) {
-					if (j - 1  >= 0  && entities[i][j - 1] == null  && entities[i][j] != null && 
-							entities[i][j] instanceof BasicEnemy && moveEnable[i][j - 1] ) {
-						int x = 0;
-						if (i == 0) {
-							x = j * 90 + 135 - entities[i][j].getWidth();
-						} else if (i == 1) {
-							x = j * 90 + 90 - entities[i][j].getWidth();
-						} else if (i == 2) {
-							x = j  * 90 + 45 - entities[i][j].getWidth();
+		if (!isGameOver) {
+			if (entities[0][0] instanceof BasicEnemy
+					|| entities[1][0] instanceof BasicEnemy
+					|| entities[2][0] instanceof BasicEnemy) {
+				for (int i = 0; i < entities.length; i++)
+					for (int j = 0; j < entities[i].length; j++)
+						entities[i][j] = null;
+				isGameOver = true;
+			}
+
+			if (this.lastMovement > 0
+					&& this.lastMovement >= ENEMY_PER_SECOND / 2) {
+
+				lastMovement = ENEMY_PER_SECOND / 2 - lastMovement;
+				for (int i = 0; i < entities.length; i++) {
+					for (int j = 0; j < entities[i].length; j++) {
+						moveEnable[i][j] = (entities[i][j] == null) ? true
+								: false;
+						if (j > 0 && moveEnable[i][j - 1] == true
+								&& entities[i][j] instanceof BasicEnemy) {
+							moveEnable[i][j] = true;
 						}
-						float f = (90f / (ENEMY_PER_SECOND / 2f))* lastMovement;
-						x = (int) (x + f);
-						
-						
-						entities[i][j].setX(x);
-						((BasicEnemy)entities[i][j]).setAnimation(2);
 					}
 				}
+				addEnemy();
 
 			}
-		} else if (lastMovement < 0) {
-			for (int i = 0; i < entities.length; i++) {
-				for (int j = 0; j < entities[i].length; j++) {
-					
-					if (j - 1  >= 0 && entities[i][j - 1] == null && entities[i][j] != null && 
-							entities[i][j] instanceof BasicEnemy){
-								
-								
-								int x = 0;
-								if (i == 0) {
-									x = (j - 1 ) * 90 + 135 - entities[i][j].getWidth();
-								} else if (i == 1) {
-									x = (j - 1 ) * 90 + 90 - entities[i][j].getWidth();
-								} else if (i == 2) {
-									x = (j - 1 )* 90 + 45 - entities[i][j].getWidth();
+			if (lastMovement < 0 && lastMovement > -ENEMY_PER_SECOND / 2) {
+				lastMovement -= delta;
+				for (int i = 0; i < entities.length; i++) {
+					for (int j = 0; j < entities[i].length; j++) {
+						if (j - 1 >= 0 && entities[i][j - 1] == null
+								&& entities[i][j] != null
+								&& entities[i][j] instanceof BasicEnemy
+								&& moveEnable[i][j - 1]) {
+							int x = 0;
+							if (i == 0) {
+								x = j * 90 + 135 - entities[i][j].getWidth();
+							} else if (i == 1) {
+								x = j * 90 + 90 - entities[i][j].getWidth();
+							} else if (i == 2) {
+								x = j * 90 + 45 - entities[i][j].getWidth();
+							}
+							float f = (90f / (ENEMY_PER_SECOND / 2f))
+									* lastMovement;
+							x = (int) (x + f);
+
+							entities[i][j].setX(x);
+							((BasicEnemy) entities[i][j]).setAnimation(2);
+						}
+					}
+
+				}
+			} else if (lastMovement < 0) {
+				for (int i = 0; i < entities.length; i++) {
+					for (int j = 0; j < entities[i].length; j++) {
+
+						if (j - 1 >= 0 && entities[i][j - 1] == null
+								&& entities[i][j] != null
+								&& entities[i][j] instanceof BasicEnemy) {
+
+							int x = 0;
+							if (i == 0) {
+								x = (j - 1) * 90 + 135
+										- entities[i][j].getWidth();
+							} else if (i == 1) {
+								x = (j - 1) * 90 + 90
+										- entities[i][j].getWidth();
+							} else if (i == 2) {
+								x = (j - 1) * 90 + 45
+										- entities[i][j].getWidth();
+							}
+							entities[i][j].setX(x);
+							((BasicEnemy) entities[i][j]).setAnimation(1);
+							entities[i][j - 1] = entities[i][j];
+							entities[i][j] = null;
+						}
+					}
+
+				}
+				lastMovement = 0;
+			} else {
+
+				lastMovement += delta;
+			}
+
+			Input input = gc.getInput();
+			enterInput(input);
+			int mouseX = input.getMouseX();
+			int mouseY = input.getMouseY();
+			boolean leftButtonPressed = input
+					.isMousePressed(Input.MOUSE_LEFT_BUTTON);
+
+			if (leftButtonPressed) {
+				list.update(mouseX, mouseY);
+
+			}
+
+			if (this.playerAdd) {
+				int counter = 0;
+				for (Polygon p : polygonList) {
+
+					if (p.contains(mouseX, mouseY) && leftButtonPressed
+
+					&& entities[counter / 2][counter % 2] == null) {
+
+						entities[counter / 2][counter % 2] = this.selectedPlayableCharacter;
+						setPlayableCharacterPosition(
+								this.selectedPlayableCharacter, counter / 2,
+								counter % 2);
+						this.selectedPlayableCharacter = null;
+						this.playerAdd = false;
+						return;
+					}
+					counter++;
+				}
+
+			} else {
+				for (int i = 0; i < entities.length; i++) {
+					for (int j = 0; j < entities[i].length; j++) {
+						if (entities[i][j] != null) {
+							entities[i][j].update(leftButtonPressed, mouseX,
+									mouseY, delta);
+						}
+					}
+				}
+			}
+			time += delta;
+			if (time > 1000) {
+				time = 0;
+				for (int i = 0; i < entities.length; i++) {
+					for (int j = 0; j < 2; j++) {
+						if (entities[i][j] instanceof MainCharacter) {
+							MainCharacter temp = (MainCharacter) entities[i][j];
+							if ((entities[i][j + 1] instanceof BasicEnemy)
+									&& temp.getFinalAttackAnimation() != temp
+											.getCurrent()) {
+								BasicEnemy tempEnemy = (BasicEnemy) entities[i][j + 1];
+								temp.setCurrent(temp.getAttackAnimation());
+								temp.setLife(temp.getLife()
+										- tempEnemy.getDamageNormalAttack());
+								tempEnemy.setCurrent(tempEnemy
+										.getAttackAnimation());
+								money = money + temp.getMoney();
+								tempEnemy.setLife(tempEnemy.getLife()
+										- temp.getDamageNormalAttack());
+								if (tempEnemy.getLife() <= 0) {
+									entities[i][j + 1] = null;
 								}
-								entities[i][j].setX(x);
-								((BasicEnemy)entities[i][j]).setAnimation(1);
-								entities[i][j - 1] = entities[i][j];
-								entities[i][j] = null;
+								if (temp.getLife() <= 0) {
+									entities[i][j] = null;
+								}
+
+							} else if (entities[i][j + 2] instanceof BasicEnemy
+									&& temp.getFinalAttackAnimation() != temp
+											.getCurrent()) {
+								BasicEnemy tempEnemy2 = (BasicEnemy) entities[i][j + 2];
+								temp.setCurrent(temp.getAttackAnimation());
+								tempEnemy2.setCurrent(tempEnemy2
+										.getAttackAnimation());
+								money = money + temp.getMoney();
+								if (entities[i][j + 1] == null) {
+									temp.setLife(temp.getLife()
+											- tempEnemy2
+													.getDamageNormalAttack());
+								}
+								tempEnemy2.setLife(tempEnemy2.getLife()
+										- temp.getDamageNormalAttack());
+								if (tempEnemy2.getLife() <= 0) {
+									entities[i][j + 2] = null;
+								}
+								if (temp.getLife() <= 0) {
+									entities[i][j] = null;
+								}
+							} else if (temp.getCurrent() != temp
+									.getFinalAttackAnimation()) {
+								temp.setCurrent(temp.getStandAnimation());
+							}
+						}
 					}
 				}
-				
-				
-				
-
 			}
-			lastMovement = 0;
 		} else {
-
-			lastMovement += delta;
-		}
-
-		Input input = gc.getInput();
-		enterInput(input);
-		int mouseX = input.getMouseX();
-		int mouseY = input.getMouseY();
-		boolean leftButtonPressed = input
-				.isMousePressed(Input.MOUSE_LEFT_BUTTON);
-
-		if (leftButtonPressed) {
-			list.update(mouseX, mouseY);
-
-		}
-
-		if (this.playerAdd) {
-			int counter = 0;
-			for (Polygon p : polygonList) {
-
-				if (p.contains(mouseX, mouseY) && leftButtonPressed
-
-				&& entities[counter / 2][counter % 2] == null) {
-
-					entities[counter / 2][counter % 2] = this.selectedPlayableCharacter;
-					setPlayableCharacterPosition(
-							this.selectedPlayableCharacter, counter / 2,
-							counter % 2);
-					this.selectedPlayableCharacter = null;
-					this.playerAdd = false;
-					return;
-				}
-				counter++;
-			}
-
-		} else {
-			for (int i = 0; i < entities.length; i++) {
-				for (int j = 0; j < entities[i].length; j++) {
-					if (entities[i][j] != null) {
-						entities[i][j].update(leftButtonPressed, mouseX,
-								mouseY, delta);
-					}
-				}
-			}
-		}
-		time += delta;
-		if(time>1000){
-			time = 0;
-			for(int i=0;i<entities.length;i++){
-				for(int j=0;j<2;j++){
-					if (entities[i][j] instanceof MainCharacter){
-						MainCharacter temp = (MainCharacter) entities[i][j];
-						if((entities[i][j+1] instanceof BasicEnemy) && 
-								temp.getFinalAttackAnimation() != temp.getCurrent() ){
-							BasicEnemy tempEnemy = (BasicEnemy) entities[i][j+1];
-							temp.setCurrent(temp.getAttackAnimation());
-							temp.setLife(temp.getLife() - tempEnemy.getDamageNormalAttack());
-							tempEnemy.setCurrent(tempEnemy.getAttackAnimation());
-							money = money + temp.getMoney();
-							tempEnemy.setLife(tempEnemy.getLife()-temp.getDamageNormalAttack());
-							if(tempEnemy.getLife()<=0){
-								entities[i][j+1]=null;
-							}
-							if(temp.getLife()<=0){
-								entities[i][j] = null;
-							}
-							
-						}
-						else if(entities[i][j+2] instanceof BasicEnemy  && 
-								temp.getFinalAttackAnimation() != temp.getCurrent()){
-							BasicEnemy tempEnemy2 = (BasicEnemy) entities[i][j+2];
-							temp.setCurrent(temp.getAttackAnimation());
-							tempEnemy2.setCurrent(tempEnemy2.getAttackAnimation());
-							money = money + temp.getMoney();
-							if(entities[i][j+1]==null){
-								temp.setLife(temp.getLife() - tempEnemy2.getDamageNormalAttack());
-							}
-							tempEnemy2.setLife(tempEnemy2.getLife()- temp.getDamageNormalAttack());
-							if(tempEnemy2.getLife()<=0){
-								entities[i][j+2]=null;
-							}
-							if(temp.getLife()<=0){
-								entities[i][j] = null;
-							}
-						}
-						else if(temp.getCurrent() != temp.getFinalAttackAnimation()){
-							temp.setCurrent(temp.getStandAnimation());
-						}
-					}
-				}
-			}
-		}
 		
+		}
+
 	}
-		
 
 	private void addEnemy() {
-			BasicEnemy marine = new BasicEnemy(
-					"resources/sprites/Marine/marine.txt", "marine");
-			enemi.add(marine);
-			Random randomGenerator = new Random();
+		BasicEnemy marine = new BasicEnemy(
+				"resources/sprites/Marine/marine.txt", "marine");
+		enemi.add(marine);
+		Random randomGenerator = new Random();
 
-			int row = randomGenerator.nextInt(3);
+		int row = randomGenerator.nextInt(3);
 
-			if (entities[row][5] == null) {
-				int x = 0;
-				int y = 0;
-				if (row == 0) {
-					x = 6 * 90 + 135 - marine.getWidth();
-					y = 180 + 90 - marine.getHeight();
-				} else if (row == 1) {
-					x =6 * 90 + 90 - marine.getWidth();
-					y = 180 + 90 * 2 - marine.getHeight();
-				} else if (row == 2) {
-					x = 6 * 90 + 45 - marine.getWidth();
-					y = 180 + 90 * 3 - marine.getHeight();
-				}
-				marine.setX(x);
-				marine.setY(y);
-				entities[row][6] = marine;
+		if (entities[row][5] == null) {
+			int x = 0;
+			int y = 0;
+			if (row == 0) {
+				x = 6 * 90 + 135 - marine.getWidth();
+				y = 180 + 90 - marine.getHeight();
+			} else if (row == 1) {
+				x = 6 * 90 + 90 - marine.getWidth();
+				y = 180 + 90 * 2 - marine.getHeight();
+			} else if (row == 2) {
+				x = 6 * 90 + 45 - marine.getWidth();
+				y = 180 + 90 * 3 - marine.getHeight();
 			}
+			marine.setX(x);
+			marine.setY(y);
+			entities[row][6] = marine;
+		}
 
-		
 	}
 
 	/**
