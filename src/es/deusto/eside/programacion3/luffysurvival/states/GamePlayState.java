@@ -18,6 +18,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
@@ -167,6 +168,10 @@ public class GamePlayState extends BasicGameState {
 	private Image gameOver;
 	
 	private int timeGameOverMovement;
+	
+	 private Rectangle gameOverRect;
+	 
+	 private float colorTrans = 0;
 
 
 
@@ -190,7 +195,7 @@ public class GamePlayState extends BasicGameState {
 				moveEnable[i][j] = true;
 			}
 		gameOver = new Image("resources/image/gameover.png",new Color(4,4,4));
-
+		gameOverRect = new Rectangle(0, 0, gc.getWidth(), gc.getHeight());
 	}
 	
 	@Override
@@ -303,7 +308,6 @@ public class GamePlayState extends BasicGameState {
 							}
 						}
 					}
-
 				}
 			});
 		}
@@ -583,12 +587,16 @@ public class GamePlayState extends BasicGameState {
 		}
 
 		if (isGameOver) {
+			g.fill(gameOverRect);
 			gameOver.draw(CENTER,y);
 		}
-		if(timeGameOverMovement>=1000){
+		if(timeGameOverMovement>=1000&& colorTrans<148){
 			Log.error("Tiempo" + timeGameOverMovement);
 			y+= 35;
-			
+			colorTrans += 37;
+			Color black = new Color(0, 0, 0, colorTrans);
+			g.setColor(black);
+			g.fill(gameOverRect);
 			gameOver.draw(CENTER, y);
 			timeGameOverMovement = 0;
 		}
