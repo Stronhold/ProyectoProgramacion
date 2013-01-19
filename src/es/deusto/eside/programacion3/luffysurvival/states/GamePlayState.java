@@ -733,14 +733,15 @@ public class GamePlayState extends BasicGameState {
 			throws SlickException {
 		Input input = gc.getInput();
 		if(endGame == true){
-			if(input.equals(Input.KEY_SPACE)){
+			if(input.isKeyDown(Input.KEY_SPACE)){
 				sb.enterState(GameState.PREMAIN_MENU_STATE.ordinal(), new FadeOutTransition(),  
 						new FadeInTransition());
+				return;
 			}
 		}
-		if (input.equals(Input.KEY_ENTER)){
+		/*if (input.isKeyPressed(Input.KEY_ENTER)){
 			gc.pause();
-		}
+		}*/
 		timeMoneyUp += delta;
 		if(isGameOver == false)
 			timeToWin += delta;

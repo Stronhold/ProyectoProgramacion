@@ -1,5 +1,7 @@
 package es.deusto.eside.programacion3.luffysurvival.states;
 
+import java.awt.Font;
+
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
@@ -12,6 +14,7 @@ import org.newdawn.slick.MouseListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
+import org.newdawn.slick.font.effects.ShadowEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -21,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import es.deusto.eside.programacion3.luffysurvival.LuffySurvival;
 import es.deusto.eside.programacion3.luffysurvival.engine.FadeOutAnimation;
+import es.deusto.eside.programacion3.luffysurvival.language.Locale;
 
 /**
  * Pre-menú del juego
@@ -64,12 +68,12 @@ public class PreMainMenuState extends BasicGameState {
 	private Image background;
 	
 	/**
-	 * mainCharacters: animación de aparecer y desaparecer de los personajes
+	 * mainCharacters: animacion de aparecer y desaparecer de los personajes
 	 */
 	private FadeOutAnimation mainCharacters;
 
 	/**
-	 *mouseListener: listener de ratón
+	 *mouseListener: listener de raton
 	 */
 	private MouseListener mouseListener;
 
@@ -79,7 +83,7 @@ public class PreMainMenuState extends BasicGameState {
 	private KeyListener keyListener;
 
 	/**
-	 * sky: animación teclado
+	 * sky: animacion teclado
 	 */
 	private Animation sky;
 
@@ -111,6 +115,13 @@ public class PreMainMenuState extends BasicGameState {
 	@Override
 	public void init(GameContainer gameContainer, StateBasedGame sb)
 			throws SlickException {
+		Font awtFont = new Font("Arial", Font.BOLD, 40);
+	    fpsFont = new UnicodeFont(awtFont);
+	    fpsFont.addAsciiGlyphs();
+		fpsFont.addGlyphs(800, 800);
+		fpsFont.getEffects().add(new ColorEffect(java.awt.Color.BLACK));
+		fpsFont.getEffects().add(new ShadowEffect());
+		fpsFont.loadGlyphs();
 		initPreMenu();
 
 	}
@@ -139,11 +150,6 @@ public class PreMainMenuState extends BasicGameState {
 					"resources/image/menu/franky.png"), DURATION);
 			this.mainCharacters.addFrame(new Image(
 					"resources/image/menu/brook.png"), DURATION);
-			fpsFont = new UnicodeFont(fontPath, 25, true, false);
-			fpsFont.addAsciiGlyphs();
-			fpsFont.addGlyphs(400, 600);
-			fpsFont.getEffects().add(new ColorEffect(java.awt.Color.WHITE));
-			fpsFont.loadGlyphs();
 
 			loadSky();
 
@@ -191,7 +197,7 @@ public class PreMainMenuState extends BasicGameState {
 		this.mainCharacters.draw(LuffySurvival.WIDTH
 				- this.mainCharacters.getCurrentFrame().getWidth(), 0);
 
-		fpsFont.drawString(140.0F, 300.0F, "Pulse una tecla para continuar", Color.yellow);
+		g.drawString(Locale.INSTANCE.getText("click"), 190, 300);
 	}
 
 	@Override
