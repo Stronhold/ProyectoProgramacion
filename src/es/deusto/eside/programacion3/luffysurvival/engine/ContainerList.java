@@ -7,6 +7,11 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Renderable;
 import org.newdawn.slick.SlickException;
 
+/**
+ * Creador de contenedor
+ * @author Sergio
+ *
+ */
 public class ContainerList implements Renderable {
 	
 	/**

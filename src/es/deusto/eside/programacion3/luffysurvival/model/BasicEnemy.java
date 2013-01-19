@@ -13,13 +13,24 @@ import org.newdawn.slick.SpriteSheet;
 
 public class BasicEnemy extends BasicCharacter{
 	
+	/**
+	 * Animacion de ataque final
+	 */
 	private Animation stopAnimation;
 	
+	/**
+	 * Constructor
+	 * @param config
+	 * @param name
+	 */
 	public BasicEnemy(String config, String name) {
 		super(config,name);
-		life = 6;
-		
+		life = 6;	
 	}
+	
+	/**
+	 * Parsea un fichero
+	 */
 	protected void parse(String propertiesFile) {
 		File file = new File(propertiesFile);
 		FileInputStream fis = null;
@@ -101,6 +112,11 @@ public class BasicEnemy extends BasicCharacter{
 		}
 		return true;
 	}
+	
+	/**
+	 * carga un estado
+	 * @param properties caracteristicas del personaje
+	 */
 	private void loadStopState(String[] properties) {
 		String spriteSheetUrl = "";
 		int damage, money, cost, frames = 0, frameWidth = 0, frameHeight = 0, time = 0;

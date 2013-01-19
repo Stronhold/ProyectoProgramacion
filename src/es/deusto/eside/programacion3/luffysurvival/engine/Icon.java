@@ -6,6 +6,11 @@ import java.util.List;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+/**
+ * Crea iconos
+ * @author Sergio
+ *
+ */
 public class Icon {
 
 	/**

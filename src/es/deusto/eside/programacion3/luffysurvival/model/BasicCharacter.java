@@ -11,6 +11,11 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.SpriteSheet;
 
+/**
+ * Crea un personaje
+ * @author Sergio
+ *
+ */
 public class BasicCharacter implements Entity {
 
 	/**
