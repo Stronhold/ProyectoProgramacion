@@ -190,8 +190,14 @@ public class MainMenuState extends BasicGameState {
 			
 			@Override
 			public void run() {
-				sb.enterState(es.deusto.eside.programacion3.luffysurvival.states.GameState.CREDIT_STATE.ordinal());
-				
+				sb.enterState(es.deusto.eside.programacion3.luffysurvival.states.GameState.CREDIT_STATE.ordinal());		
+			}
+		});
+		buttonOption.addCallback(new Runnable() {
+			
+			@Override
+			public void run() {
+				sb.enterState(es.deusto.eside.programacion3.luffysurvival.states.GameState.OPTIONS_STATE.ordinal());
 			}
 		});
 	}
@@ -224,7 +230,7 @@ public class MainMenuState extends BasicGameState {
 		buttonCredits.setText(Locale.INSTANCE.getText("credit"));
 		buttonCredits.setTheme("button");
 		buttonCredits.setPosition(50, 150 + buttonInitGame.getHeight() + buttonOption.getHeight());
-
+		
 		twlInputAdapter.getGui().getRootPane()
 				.setSize(LuffySurvival.WIDTH, LuffySurvival.HEIGHT);
 		twlInputAdapter.getGui().getRootPane().add(buttonCredits);

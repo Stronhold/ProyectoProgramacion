@@ -54,7 +54,7 @@ public class GamePlayState extends BasicGameState {
 	/**
 	 * Direccion del mapa del nivel 1
 	 */
-	private static final String MAP_LOCATION = "resources/maps/level/1/mapa.tmx";
+	private static final String MAP_LOCATION = "resources/maps/level/1/mapa1.tmx";
 
 	/**
 	 * Numero de filas

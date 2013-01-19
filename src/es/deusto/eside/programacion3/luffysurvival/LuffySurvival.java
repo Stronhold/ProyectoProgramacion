@@ -6,12 +6,14 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import es.deusto.eside.programacion3.luffysurvival.language.Locale;
+import es.deusto.eside.programacion3.luffysurvival.states.CreditState;
 import es.deusto.eside.programacion3.luffysurvival.states.GamePlayState;
 import es.deusto.eside.programacion3.luffysurvival.states.GameState;
 import es.deusto.eside.programacion3.luffysurvival.states.MainMenuState;
 import es.deusto.eside.programacion3.luffysurvival.states.PreMainMenuState;
 import es.deusto.eside.programacion3.luffysurvival.states.OpeningState;
 import es.deusto.eside.programacion3.luffysurvival.states.OptionState;
+import es.deusto.eside.programacion3.luffysurvival.util.PreferenceManager;
 
 /**
  * Clase principal del juego
@@ -28,6 +30,8 @@ public class LuffySurvival extends StateBasedGame {
 	 * HEIGHT: alto de la ventana
 	 */
 	public static final int HEIGHT = 480;
+	
+	public static PreferenceManager p;
 
 	/**
 	 * constructor del juego 
@@ -35,6 +39,7 @@ public class LuffySurvival extends StateBasedGame {
 	 */
 	public LuffySurvival(String name) {
 		super(name);	
+		p = new PreferenceManager();
 	}
 
 	@Override
@@ -44,7 +49,7 @@ public class LuffySurvival extends StateBasedGame {
 		this.addState(new PreMainMenuState(GameState.PREMAIN_MENU_STATE.ordinal()));
 		this.addState(new MainMenuState(GameState.MAIN_MENU_STATE.ordinal()));
 		this.addState(new GamePlayState(GameState.GAME_PLAY_STATE.ordinal()));
-		this.addState(new GamePlayState(GameState.CREDIT_STATE.ordinal()));
+		this.addState(new CreditState(GameState.CREDIT_STATE.ordinal()));
 		this.addState(new OptionState(GameState.OPTIONS_STATE.ordinal()));		
 	}
 /**
@@ -55,8 +60,8 @@ public class LuffySurvival extends StateBasedGame {
 		try {
 			AppGameContainer app = new AppGameContainer(new LuffySurvival(
 					Locale.INSTANCE.getText("title")));
-
 			app.setDisplayMode(WIDTH, HEIGHT, false);
+			app.setFullscreen(p.isFullScreen());
 			app.setShowFPS(false);
 			app.setVSync(true);
 			app.start();

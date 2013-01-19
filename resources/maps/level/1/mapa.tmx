@@ -12,19 +12,24 @@
  <tileset firstgid="181" name="sea" tilewidth="16" tileheight="16">
   <image source="sea.png" width="16" height="16"/>
  </tileset>
+ <layer name="Montaña" width="40" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztwwEJAAAMA6D1j7OEz7GjYJPUtwEAAADWHUvBU3E=
+  </data>
+ </layer>
  <layer name="Mar" width="40" height="30">
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3P2wqCQBRG4Xl/Tc0SswI7aPWYrQGFje0LUcib/4MF454ZGEOQNRJKaUcZ5VQ4s8w584/Znko60NGsq8k6OtPFfJfOzDu3ZlbTiRqz15j3VsOZdphb05m9P/Luzp1FT+qopxe96RN+2fdfnf3xfVuJ/3ajOz02fIeIiIiIiIjIEl8g/t6QwBIAAA==
+  <data encoding="base64" compression="zlib">
+   eJztz9sKgkAURuF5f03NErMCO2j1mK0BhY3tC1HIm/+DBeOeGRhDkDUSSmlHGeVUOLPMOfOP2Z5KOtDRrKvJOjrTxXyXzsw7t2ZW04kas9eY91bDmXaYW9OZvT/y7s6dRU/qqKcXvekTftn3X5398X1bif92ozs9NnyHiIiIiIiIyBJfkkpAPw==
   </data>
  </layer>
  <layer name="Muros" width="40" height="30">
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+2QSQ6DMBAE+R65QMILIDtLAll5PnWIJWuEIg6RnUOXVJK7Zw7WJIkQ8UhxFfsTX8gw/7jGzcJ38ePs3nanxAq3uMM9Hv4oH/GEZ6yxwTZQdp0/s/sdXvCKPQ54C5Rd58/s/h0f+MQXvnEMlF3nz+x+zPvNZdvHvN9ctr0QQgghhBBiORP0iAa6wBIAAA==
+  <data encoding="base64" compression="zlib">
+   eJztkEkOgzAQBPkeuUDCCyA7SwJZeT51iCVrhCIOkZ1Dl1SSu2cO1iSJEPFIcRX7E1/IMP+4xs3Cd/Hj7N52p8QKt7jDPR7+KB/xhGesscE2UHadP7P7HV7wij0OeAuUXefP7P4dH/jEF75xDJRd58/sfsz7zWXbx7zfXLa9EEIIIYQQYjkTYDh1kw==
   </data>
  </layer>
  <layer name="Hierba" width="40" height="30">
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+2VaU4DMQyF5wKUrey0DFDK0gJlKVs5KffgfjyksXgyz0mmP/jDRPrk2HEyjuNkqqpr/7V9Bn3T/8JW0nycfi3TPwr9lrF1rWtd+91WQA+sgjWS62DD9XtiPKWrMQX7e9sm6IMtsE1yB+y6fl+Mp3Q1pmB/b9sD++AAHJIcgGEzlsL7s67GFOzvbUegBsfgBJyCUWNrg487WpNtJT5nYAzOwQW4BFeNrQ0+3mhNtpX4TMAUXIMbcAtmja0NPt5oTbaV+Pj6Gwh92OytTR0qGzMOfHx8qv68Pqp+asoTxaHWYNQctZbKn6qLWpxhFNsoWIPxOY3ulMqfqgurKSP37qg1GN6L3Vu1p+j++txM3TfrDLm7YnFZPiM/db5R/fD83Hvj77f/rsU1S+T7O47ofc7ltOTNUTlTZ6O+b7L0fKOc+neD4fvq85W7jyYnQSzKVrqPnM5zorM1mfr/purP5iu/nM5zon7ufJUtene8X07nOVGfz7fkP9jGltN5TtQ33ztwDx7AI8k5eEropX7zJX1NPoMX8AreSC7Ae0Iv9Vss6WvyCzifp5zAEgAA
+  <data encoding="base64" compression="zlib">
+   eJztlWlOAzEMhecClK3stAxQytICZSlbOSn34H48pLF4Ms9Jpj/4w0T65NhxMo7jZKqqa/+1fQZ90//CVtJ8nH4t0z8K/Zaxda1rXfvdVkAPrII1kutgw/V7YjylqzEF+3vbJuiDLbBNcgfsun5fjKd0NaZgf2/bA/vgABySHIBhM5bC+7OuxhTs721HoAbH4AScglFja4OPO1qTbSU+Z2AMzsEFuARXja0NPt5oTbaV+EzAFFyDG3ALZo2tDT7eaE22lfj4+hsIfdjsrU0dKhszDnx8fKr+vD6qfmrKE8Wh1mDUHLWWyp+qi1qcYRTbKFiD8TmN7pTKn6oLqykj9+6oNRjei91btafo/vrcTN036wy5u2JxWT4jP3W+Uf3w/Nx74++3/67FNUvk+zuO6H3O5bTkzVE5U2ejvm+y9HyjnPp3g+H76vOVu48mJ0Esyla6j5zOc6KzNZn6/6bqz+Yrv5zOc6J+7nyVLXp3vF9O5zlRn8+35D/YxpbTeU7UN987cA8ewCPJOXhK6KV+8yV9TT6DF/AK3kguwHtCL/VbLOlr8gtl2Yhe
   </data>
  </layer>
 </map>

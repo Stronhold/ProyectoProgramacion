@@ -1,0 +1,2 @@
+activatedFullScreen: true
+activatedVolume: true
