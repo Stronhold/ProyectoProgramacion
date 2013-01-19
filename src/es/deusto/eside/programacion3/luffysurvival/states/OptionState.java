@@ -18,6 +18,8 @@ import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 import de.matthiasmann.twl.theme.ThemeManager;
 import es.deusto.eside.programacion3.luffysurvival.LuffySurvival;
 import es.deusto.eside.programacion3.luffysurvival.language.Locale;
+import es.deusto.eside.programacion3.luffysurvival.util.PreferenceManager;
+
 import java.io.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -71,8 +73,7 @@ public class OptionState extends BasicGameState {
 	Image background;
 	Image check;
 	Image uncheck;
-	boolean activatedVolume = true;
-	boolean activatedFullScreen = false;
+
 	/**
 	 * Constructor
 	 * @param ordinal: número de estado del programa 
@@ -140,23 +141,28 @@ public class OptionState extends BasicGameState {
 						try {
 							fstream = new FileWriter("resources/Option/option.txt");
 							BufferedWriter out = new BufferedWriter(fstream);
-							if(activatedFullScreen == true){
+							if(LuffySurvival.p.isFullScreen() == true){
+								LuffySurvival.p.setFullScreen(true);
 								String temp = "activatedFullScreen: true";
 								out.write(temp);
 								out.newLine();
 							}
 							else{
+								LuffySurvival.p.setFullScreen(false);
 								String temp = "activatedFullScreen: false";
 								out.write(temp);
 								out.newLine();
 							}
-							if(activatedVolume == true){
+							if(LuffySurvival.p.isMusic() == true){
+								PreferenceManager.setMusic(true);
+								System.out.println("" + LuffySurvival.p.isMusic());
 								String temp = "activatedVolume: true";
 								out.write(temp);
 								out.newLine();
 							}
 							else{
 								String temp = "activatedVolume: false";
+								PreferenceManager.setMusic(false);
 								out.write(temp);
 								out.newLine();
 							}
@@ -244,14 +250,14 @@ public class OptionState extends BasicGameState {
 		//80, 193
 		g.setColor(white);
 		fpsFont.drawString(80, 193, Locale.INSTANCE.getText("fullScreen"));
-		if(activatedFullScreen == false){
+		if(LuffySurvival.p.isFullScreen() == false){
 			g.drawImage(uncheck, 350, 198);
 		}
 		else{
 			g.drawImage(check, 350, 198);
 		}
 		fpsFont.drawString(80, 293, Locale.INSTANCE.getText("volume"));
-		if(activatedVolume == true){
+		if(LuffySurvival.p.isMusic() == true){
 			g.drawImage(check, 230, 298);
 		}
 		else{
@@ -267,10 +273,10 @@ public class OptionState extends BasicGameState {
 		int positionX = input.getMouseX();
 		int positionY = input.getMouseY();
 		if(positionX>350 && positionX < 400 && positionY > 198 && positionY < 248 && input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){
-			activatedFullScreen = !activatedFullScreen;
+			LuffySurvival.p.setFullScreen(!LuffySurvival.p.isFullScreen());
 		}
 		if(positionX>230 && positionX<280 && positionY>298 && positionY<348 && input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){
-			activatedVolume = !activatedVolume;
+			LuffySurvival.p.setMusic(LuffySurvival.p.isMusic());
 		}
 
 	}

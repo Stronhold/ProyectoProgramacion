@@ -90,6 +90,12 @@ public class MainMenuState extends BasicGameState {
 
 	@Override
 	public void enter(final GameContainer gameContainer, final StateBasedGame sb) {
+		try {
+			gameContainer.setFullscreen(LuffySurvival.p.isFullScreen());
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		gameContainer.getInput().addPrimaryListener(twlInputAdapter);
 	}
 

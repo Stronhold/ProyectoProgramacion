@@ -1,5 +1,6 @@
 package es.deusto.eside.programacion3.luffysurvival.states;
 
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 
 import org.newdawn.slick.Animation;
@@ -12,12 +13,20 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
+import org.newdawn.slick.font.effects.OutlineEffect;
+import org.newdawn.slick.font.effects.ShadowEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
+
+import TWLSlick.TWLInputAdapter;
+import de.matthiasmann.twl.GUI;
+import de.matthiasmann.twl.Widget;
+import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 
 
 import es.deusto.eside.programacion3.luffysurvival.engine.FadeOutAnimation;
@@ -41,7 +50,33 @@ public class CreditState extends BasicGameState{
 	private KeyListener keyListener;
 	//private Music song;
 	int WIDTH = 640;
-	int HEIGTH = 480;	
+	int HEIGTH = 480;
+	/**
+	 * Widget padre
+	 */
+	private Widget root;
+
+	/**
+	 * LWGLRenderer contexto de renderizado 
+	 */
+	private LWJGLRenderer lwjglRenderer;
+	/**
+	 * theme tema usado para la escritura
+	 */
+	private Object theme;
+
+	/**
+	 * gui intefaz de usuario
+	 */
+	private GUI gui;
+	/**
+	 * twlInputoAdapter: gestiona las entradas de los botones
+	 */
+	private TWLInputAdapter twlInputAdapter;
+	private static final String fontPath = "resources/fonts/credit.ttf";
+	/**
+	 * fpsFont: fuente para escribir
+	 */
 	private UnicodeFont fpsFont;
 	/**
 	 * constructor del juego
@@ -62,7 +97,18 @@ public class CreditState extends BasicGameState{
 	@Override
 	public void init(GameContainer arg0, StateBasedGame arg1)
 			throws SlickException {
-		
+	    Font awtFont = new Font("Arial", Font.BOLD, 24);
+	    fpsFont = new UnicodeFont(awtFont);
+		//fpsFont = new UnicodeFont(fontPath, 16, true, false);
+		fpsFont.addAsciiGlyphs();
+		fpsFont.addGlyphs(800, 800);
+		fpsFont.getEffects().add(new ColorEffect(java.awt.Color.WHITE));
+		fpsFont.getEffects().add(new ShadowEffect());
+		fpsFont.loadGlyphs();
+
+	  //  uFontG = new UnicodeFont(fontB, fontB.getSize(), fontB.isBold(), fontB.isItalic());
+	   // Font fontS = new Font("Serif", Font.PLAIN, 14);
+
 		this.right = new FadeOutAnimation();
 		Image a = new Image("resources/image/Credit/Shanks.png");
 		a = a.getScaledCopy(0.5f);
@@ -145,7 +191,6 @@ public class CreditState extends BasicGameState{
 	@Override
 	public void render(GameContainer arg0, StateBasedGame sb, Graphics g)
 			throws SlickException {
-		g.setColor(Color.black);
 		if(timer>0 && timer < 5000){
 			Image a = new Image("resources/image/credit/Wallpaper1.png");
 			a = a.getScaledCopy(WIDTH, HEIGTH);
@@ -172,17 +217,20 @@ public class CreditState extends BasicGameState{
 			this.right.draw(710-right.getWidth(), 480-right.getHeight());
 		}
 		if(timer> 0 && timer < 3000){
-			g.drawString(Locale.INSTANCE.getText("gameDone"), 100, 100);
+			fpsFont.drawString(100, 100, Locale.INSTANCE.getText("gameDone"));
+			fpsFont.drawString(125, 140, "Slick2D");
 		}
 		if (timer > 3000 && timer<6000){
-			g.drawString(Locale.INSTANCE.getText("Video"), 100, 150);
+			fpsFont.drawString(100, 150, Locale.INSTANCE.getText("Video"));
+			fpsFont.drawString(125, 190, "Regiosk8 (youtube)");
 		}
 		if(timer > 6000 && timer<9000){
-			g.drawString(Locale.INSTANCE.getText("Sprite"), 100, 200);
-			g.drawString(Locale.INSTANCE.getText("url"), 100, 220);
+			fpsFont.drawString(100, 200, Locale.INSTANCE.getText("Sprite"));
+			fpsFont.drawString(125, 240,Locale.INSTANCE.getText("url") );
 		}
 		if(timer>9000 && timer<12000){
-			g.drawString(Locale.INSTANCE.getText("done"), 100, 270);		
+			fpsFont.drawString(100, 250, Locale.INSTANCE.getText("done"));
+			fpsFont.drawString(125, 290, "Sergio Ausín");		
 		}
 		if(timer>15000){
 			timer = 0;
