@@ -16,11 +16,14 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.util.Log;
 
@@ -49,6 +52,9 @@ import es.deusto.eside.programacion3.luffysurvival.model.MainCharacter;
  */
 public class GamePlayState extends BasicGameState {
 
+	/**
+	 * Tiempo que pasa entre enemigo y enemigo
+	 */
 	private static final int ENEMY_PER_SECOND = 5000;
 
 	/**
@@ -65,6 +71,9 @@ public class GamePlayState extends BasicGameState {
 	 */
 	private static final int COLUMNS = 6;
 
+	/**
+	 * posicion de imagen
+	 */
 	private static final float CENTER = 176;
 	/**
 	 * Numero del estado del juego
@@ -72,10 +81,19 @@ public class GamePlayState extends BasicGameState {
 	private int stateId;
 
 	/**
+	 * para indicar si es la primera vez que se pulsa
+	 */
+	private boolean isFirstTime = true;
+
+	/**
 	 * Dinero
 	 */
-	private int money = 1000;
+	private int money = 90;
 
+	/**
+	 * tiempo para incrementar el dinero
+	 */
+	private int timeMoneyUp;
 	/**
 	 * Mapa del nivel 1
 	 */
@@ -126,6 +144,9 @@ public class GamePlayState extends BasicGameState {
 	 */
 	private Entity[][] entities;
 
+	/**
+	 * Indica si el personaje se puede mover
+	 */
 	private boolean[][] moveEnable;
 
 	/**
@@ -143,14 +164,64 @@ public class GamePlayState extends BasicGameState {
 	 */
 	private HashMap<String, MainCharacter> charactersPlaced;
 
+	/**
+	 * Lista de los enemigos
+	 */
 	private ArrayList<BasicEnemy> enemi;
 
+	/**
+	 * Indica el ultimo enemigo
+	 */
 	private int lastMovement;
 
+	/**
+	 * tiempo
+	 */
 	private int time = 0;
 	
+	/**
+	 * posicion
+	 */
 	private float y=0;
 
+	/**
+	 * indica el numero de ultimo enemigo
+	 */
+	public int lastEnemy;
+
+	/**
+	 * Indica si se ha de dibujar la imagen de game over
+	 */
+	private boolean isGameOver;
+	/**
+	 * Imagen 
+	 */
+	private Image gameOver;
+	
+	/**
+	 * tiempo de movimiento
+	 */
+	private int timeGameOverMovement;
+	/**
+	 * Rectangulo
+	 */
+	private Rectangle gameOverRect;
+	 /**
+	  * Color alpha
+	  */
+	private float colorTrans = 0;
+	/**
+	 * Imagen de victoria
+	 */
+	private Image win;
+	/**
+	 * Tiempo que ha de pasar para ganar
+	 */
+	private int timeToWin = 0;
+	/**
+	 * Indica si se ha terminado el juego
+	 */
+	private boolean endGame = false;
 	/**
 	 * Constructor
 	 * 
@@ -161,24 +232,13 @@ public class GamePlayState extends BasicGameState {
 		this.stateId = ordinal;
 	}
 
-	public int lastEnemy;
-
-	private boolean isGameOver;
-
-	private Image gameOver;
-	
-	private int timeGameOverMovement;
-	
-	 private Rectangle gameOverRect;
-	 
-	 private float colorTrans = 0;
-
-
-
 	@Override
 	public void init(GameContainer gc, StateBasedGame sb) throws SlickException {
 		timeGameOverMovement = 0;
+		initKeyListener(sb);
 		y = 0;
+		win = new Image("resources/image/win1.png");
+		win = win.getScaledCopy(640, 480);
 		lastEnemy = ENEMY_PER_SECOND;
 		lastMovement = 0;
 		this.map = new TiledMap(MAP_LOCATION);
@@ -229,6 +289,9 @@ public class GamePlayState extends BasicGameState {
 		addEventsPlayableCharacters();
 	}
 
+	/**
+	 * anade imagenes de super ataque, borrado y animacion
+	 */
 	private void addEventsPlayableCharacters() {
 		Set<Entry<String, MainCharacter>> keyValue = charactersPlaced
 				.entrySet();
@@ -510,8 +573,8 @@ public class GamePlayState extends BasicGameState {
 		list.addIcon(brookIcon);
 	}
 
-	/*
-	 * /** Inicializa el contenedor
+	/**
+	 * Inicializa el contenedor
 	 * 
 	 * @param gc ventana
 	 * 
@@ -540,8 +603,8 @@ public class GamePlayState extends BasicGameState {
 	/**
 	 * Inicializa el tema de escritura
 	 * 
-	 * @param gc
-	 *            : ventana del juego
+	 * @param gc: ventana del juego
+	 *            
 	 */
 	private void initTWL(GameContainer gc) {
 		root = new Widget();
@@ -568,7 +631,7 @@ public class GamePlayState extends BasicGameState {
 	}
 
 	@Override
-	public void render(GameContainer gc, StateBasedGame ab, Graphics g)
+	public void render(GameContainer gc, StateBasedGame sb, Graphics g)
 			throws SlickException {
 		this.map.render(0, 0);
 		list.draw();
@@ -586,7 +649,7 @@ public class GamePlayState extends BasicGameState {
 			}
 		}
 
-		if (isGameOver) {
+		if (timeToWin<120000 && isGameOver) {
 			g.fill(gameOverRect);
 			gameOver.draw(CENTER,y);
 		}
@@ -599,8 +662,16 @@ public class GamePlayState extends BasicGameState {
 			g.fill(gameOverRect);
 			gameOver.draw(CENTER, y);
 			timeGameOverMovement = 0;
+			endGame = true;
+
+		}
+		
+		if(timeToWin >= 180000){
+			g.drawImage(win, 0, 0);
+			endGame = true;
 		}
 	}
+	
 
 	/**
 	 * Dibuja los espacios del juego
@@ -654,11 +725,30 @@ public class GamePlayState extends BasicGameState {
 			a.addPoint(0 + i * 90, 180 * 2 + 90);
 			polygonList.add(a);
 		}
+		
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sb, int delta)
 			throws SlickException {
+		Input input = gc.getInput();
+		if(endGame == true){
+			if(input.equals(Input.KEY_SPACE)){
+				sb.enterState(GameState.PREMAIN_MENU_STATE.ordinal(), new FadeOutTransition(),  
+						new FadeInTransition());
+			}
+		}
+		if (input.equals(Input.KEY_ENTER)){
+			gc.pause();
+		}
+		timeMoneyUp += delta;
+		if(isGameOver == false)
+			timeToWin += delta;
+		
+		if(timeMoneyUp >= 5000){
+			money += 15;
+			timeMoneyUp = 0;
+		}
 		if(isGameOver && y<140){
 			timeGameOverMovement += timeGameOverMovement + delta;
 		}
@@ -748,8 +838,6 @@ public class GamePlayState extends BasicGameState {
 				lastMovement += delta;
 			}
 
-			Input input = gc.getInput();
-			enterInput(input);
 			int mouseX = input.getMouseX();
 			int mouseY = input.getMouseY();
 			boolean leftButtonPressed = input
@@ -850,6 +938,9 @@ public class GamePlayState extends BasicGameState {
 
 	}
 
+	/**
+	 * Anade enemigos
+	 */
 	private void addEnemy() {
 		BasicEnemy marine = new BasicEnemy(
 				"resources/sprites/Marine/marine.txt", "marine");
@@ -908,13 +999,52 @@ public class GamePlayState extends BasicGameState {
 
 	}
 
-	private void enterInput(Input i) {
-
-	}
 
 	@Override
 	public int getID() {
 		return this.stateId;
 	}
+	
+	/**
+	 * KeyListener
+	 * @param sb estado del juego
+	 * @return
+	 */
+	private KeyListener initKeyListener(final StateBasedGame sb) {
+		KeyListener kl = new KeyListener() {
 
+			@Override
+			public void inputEnded() {
+			}
+
+			@Override
+			public boolean isAcceptingInput() {
+				return true;
+			}
+
+			@Override
+			public void setInput(Input arg0) {
+			}
+
+			@Override
+			public void keyPressed(int arg0, char arg1) {
+			}
+
+			@Override
+			public void keyReleased(int arg0, char arg1) {
+				if(isFirstTime && endGame == true){
+					sb.enterState(GameState.PREMAIN_MENU_STATE.ordinal(),
+							new FadeOutTransition(), new FadeInTransition());
+					isFirstTime  = false;
+				}
+			}
+
+			@Override
+			public void inputStarted() {
+
+			}
+		};
+
+		return kl;
+	}
 }

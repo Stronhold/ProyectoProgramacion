@@ -160,7 +160,7 @@ public class MainCharacter extends BasicCharacter {
 	
 	public MainCharacter(String config, String name) {
 		super(config, name);
-		life = 2;
+		life = 20;
 		listenerDelete = new ArrayList<ImageClickListener>();
 		listenerAttack = new ArrayList<ImageClickListener>();
 		contextMenu = false;

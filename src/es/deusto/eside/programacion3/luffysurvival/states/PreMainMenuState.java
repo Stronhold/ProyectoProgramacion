@@ -115,7 +115,7 @@ public class PreMainMenuState extends BasicGameState {
 
 	}
 	/**
-	 * Inicializa el menú con las imágenes
+	 * Inicializa el menu con las imagenes
 	 */
 	private void initPreMenu() {
 		try {
@@ -157,7 +157,7 @@ public class PreMainMenuState extends BasicGameState {
 	}
 
 	/**
-	 * Carga animación del cielo
+	 * Carga animacion del cielo
 	 */
 	private void loadSky() {
 		String source = "resources/sprites/intro/sky/sky";
@@ -219,6 +219,11 @@ public class PreMainMenuState extends BasicGameState {
 	}
 
 
+	/**
+	 * KeyListener
+	 * @param sb estado
+	 * @return
+	 */
 	private KeyListener initKeyListener(final StateBasedGame sb) {
 		KeyListener kl = new KeyListener() {
 			@Override
@@ -256,6 +261,11 @@ public class PreMainMenuState extends BasicGameState {
 		return kl;
 	}
 
+	/**
+	 * MouseListener
+	 * @param sb estado
+	 * @return
+	 */
 	private MouseListener initMouserListener(final StateBasedGame sb) {
 		return new MouseListener() {
 

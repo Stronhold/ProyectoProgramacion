@@ -227,6 +227,11 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 				* LuffySurvival.HEIGHT * 4);
 	}
 
+	/**
+	 * MouseListener
+	 * @param sb estado
+	 * @return
+	 */
 	private MouseListener initMouserListener(final StateBasedGame sb) {
 		return new MouseListener() {
 
@@ -289,12 +294,13 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 	private void stopVideo() {
 
 		mediaPlayer.stop();
-		//mediaPlayer.release();
-		//mediaPlayerFactory.release();
-		//mediaPlayerFactory = null;
-		//mediaPlayer = null;
 	}
 
+	/**
+	 * KeyListener
+	 * @param sb estado del juego
+	 * @return
+	 */
 	private KeyListener initKeyListener(final StateBasedGame sb) {
 		KeyListener kl = new KeyListener() {
 			@Override
@@ -331,6 +337,11 @@ public class OpeningState extends BasicGameState implements RenderCallback {
 		return kl;
 	}
 
+	/**
+	 * VideoListener
+	 * @param sb estado
+	 * @return
+	 */
 	private MediaPlayerEventListener initVideoListener(final StateBasedGame sb) {
 		return new MediaPlayerEventListener() {
 

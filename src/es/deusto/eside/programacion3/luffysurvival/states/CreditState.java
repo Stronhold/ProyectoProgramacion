@@ -44,40 +44,39 @@ public class CreditState extends BasicGameState{
 	 * stateID estado del juego
 	 */
 	private int stateID;
-	private boolean music = true;
+
+	/**
+	 * Indica si es la primera vez que pincha
+	 */
 	private boolean isFirstTime = true;
+	
+	/**
+	 * Animacion
+	 */
 	private FadeOutAnimation right;
+	
+	/**
+	 * KeyListener
+	 */
 	private KeyListener keyListener;
 	//private Music song;
+	
+	/**
+	 * Ancho
+	 */
 	int WIDTH = 640;
+	
+	/**
+	 * Alto
+	 */
 	int HEIGTH = 480;
-	/**
-	 * Widget padre
-	 */
-	private Widget root;
+	
 
-	/**
-	 * LWGLRenderer contexto de renderizado 
-	 */
-	private LWJGLRenderer lwjglRenderer;
-	/**
-	 * theme tema usado para la escritura
-	 */
-	private Object theme;
-
-	/**
-	 * gui intefaz de usuario
-	 */
-	private GUI gui;
-	/**
-	 * twlInputoAdapter: gestiona las entradas de los botones
-	 */
-	private TWLInputAdapter twlInputAdapter;
-	private static final String fontPath = "resources/fonts/credit.ttf";
 	/**
 	 * fpsFont: fuente para escribir
 	 */
 	private UnicodeFont fpsFont;
+	
 	/**
 	 * constructor del juego
 	 * @param ordinal numero de estado
@@ -105,10 +104,6 @@ public class CreditState extends BasicGameState{
 		fpsFont.getEffects().add(new ColorEffect(java.awt.Color.WHITE));
 		fpsFont.getEffects().add(new ShadowEffect());
 		fpsFont.loadGlyphs();
-
-	  //  uFontG = new UnicodeFont(fontB, fontB.getSize(), fontB.isBold(), fontB.isItalic());
-	   // Font fontS = new Font("Serif", Font.PLAIN, 14);
-
 		this.right = new FadeOutAnimation();
 		Image a = new Image("resources/image/Credit/Shanks.png");
 		a = a.getScaledCopy(0.5f);
@@ -146,11 +141,15 @@ public class CreditState extends BasicGameState{
 		i.removeKeyListener(keyListener);
 		isFirstTime = true;
 	//	song.stop();
-		music = true;
 		timer = 0;
 	}
 
 
+	/**
+	 * Key listener
+	 * @param sb estado del juego
+	 * @return
+	 */
 	private KeyListener initKeyListener(final StateBasedGame sb) {
 		KeyListener kl = new KeyListener() {
 			@Override

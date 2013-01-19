@@ -31,6 +31,9 @@ public class LuffySurvival extends StateBasedGame {
 	 */
 	public static final int HEIGHT = 480;
 	
+	/**
+	 * Indica las opciones del juego
+	 */
 	public static PreferenceManager p;
 
 	/**

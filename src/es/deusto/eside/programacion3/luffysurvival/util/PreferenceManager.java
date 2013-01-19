@@ -6,11 +6,26 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+/**
+ * Clase que lee un fichero para conocer las opciones de juego
+ * @author Sergio
+ *
+ */
 public class PreferenceManager {
 
+	/**
+	 * Indica si activar la musica
+	 */
 	 static boolean music;
+	 
+	 /**
+	  * Indica si activar la pantalla completa
+	  */
 	 static boolean fullScreen;
 	
+	 /**
+	  * Constructor de la clase
+	  */
 	public PreferenceManager(){
 		 try{
 			  // Open the file that is the first 

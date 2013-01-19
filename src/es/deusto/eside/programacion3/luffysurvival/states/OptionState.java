@@ -40,13 +40,26 @@ import TWLSlick.TWLInputAdapter;
 
 public class OptionState extends BasicGameState {
 
+	/**
+	 * boton de aceptar
+	 */
 	private Button accept;
+	
+	/**
+	 * boton de cancelar
+	 */
 	private Button cancel;
+	
+	/**
+	 * Fuente
+	 */
 	private UnicodeFont fpsFont;
+	
 	/**
 	 * stateId: indica el estado del programa
 	 */
 	private int stateId;
+	
 	/**
 	 * Widget padre
 	 */
@@ -69,9 +82,25 @@ public class OptionState extends BasicGameState {
 	 * twlInputoAdapter: gestiona las entradas de los botones
 	 */
 	private TWLInputAdapter twlInputAdapter;
+	
+	/**
+	 * Ruta del estilo
+	 */
 	private static final String fontPath = "resources/fonts/OnePiece.ttf";
+	
+	/**
+	 * Imagen de fondo
+	 */
 	Image background;
+	
+	/**
+	 * Imagen aceptado
+	 */
 	Image check;
+	
+	/**
+	 * Imagen cancelado
+	 */
 	Image uncheck;
 
 	/**
@@ -124,6 +153,10 @@ public class OptionState extends BasicGameState {
 		
 		}
 		
+		/**
+		 * Inicia los eventos de botones
+		 * @param sb estado del juego
+		 */
 		private void initButtonsEvent(final StateBasedGame sb) {
 			cancel.addCallback(new Runnable() {
 				
@@ -176,6 +209,9 @@ public class OptionState extends BasicGameState {
 			});
 		}
 
+		/**
+		 * Crea los botones
+		 */
 		private void createButtons() {
 			accept = new Button();
 			accept.setText(Locale.INSTANCE.getText("accept"));
@@ -198,6 +234,10 @@ public class OptionState extends BasicGameState {
 			
 		}
 
+		/**
+		 * Inicializa el tema de escritura
+		 * @param gc: ventana del juego
+		 */
 		private void initTWL(GameContainer gc) {
 			root = new Widget();
 			root.setTheme("");
