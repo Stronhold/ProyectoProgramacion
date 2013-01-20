@@ -11,6 +11,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.MouseListener;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
@@ -27,7 +28,7 @@ import es.deusto.eside.programacion3.luffysurvival.engine.FadeOutAnimation;
 import es.deusto.eside.programacion3.luffysurvival.language.Locale;
 
 /**
- * Pre-menú del juego
+ * Pre-menu del juego
  * @author sergio
  *
  */
@@ -100,11 +101,18 @@ public class PreMainMenuState extends BasicGameState {
 	 */
 	private final Logger logger = LoggerFactory.getLogger(OpeningState.class);
 	
+	/**
+	 * Cancion
+	 */
+	private Music song;
+	
 
 	@Override
 	public void enter(final GameContainer container, final StateBasedGame sb) {
 		Input i = container.getInput();
-
+		if(LuffySurvival.p.isMusic() == true){
+			song.loop();
+		}
 		keyListener = initKeyListener(sb);
 		i.addKeyListener(keyListener);
 		mouseListener = initMouserListener(sb);
@@ -122,6 +130,7 @@ public class PreMainMenuState extends BasicGameState {
 		fpsFont.getEffects().add(new ColorEffect(java.awt.Color.BLACK));
 		fpsFont.getEffects().add(new ShadowEffect());
 		fpsFont.loadGlyphs();
+		song = new Music("resources/Music/PreMenu.ogg");
 		initPreMenu();
 
 	}
@@ -218,7 +227,7 @@ public class PreMainMenuState extends BasicGameState {
 	@Override
 	public void leave(final GameContainer container, final StateBasedGame sb) {
 		Input i = container.getInput();
-
+		song.stop();
 		i.removeKeyListener(keyListener);
 		i.removeMouseListener(mouseListener);
 

@@ -24,6 +24,7 @@ import java.io.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
@@ -102,6 +103,11 @@ public class OptionState extends BasicGameState {
 	 * Imagen cancelado
 	 */
 	Image uncheck;
+	
+	/**
+	 * Cancion
+	 */
+	Music song;
 
 	/**
 	 * Constructor
@@ -114,17 +120,22 @@ public class OptionState extends BasicGameState {
 	@Override
 	public void enter(final GameContainer gameContainer, final StateBasedGame sb) {
 		gameContainer.getInput().addPrimaryListener(twlInputAdapter);
+		if(LuffySurvival.p.isMusic()==true){
+			song.loop();
+		}
 	}
 
 	@Override
 	public void leave(final GameContainer gameContainer, final StateBasedGame sb) {
 		gameContainer.getInput().removeListener(twlInputAdapter);
+		song.stop();
 	}
 
 
 		@Override
 	public void init(GameContainer gameContainer, StateBasedGame sb)
 			throws SlickException {
+			song = new Music("resources/Music/Option.ogg");
 			check = new Image("resources/image/Option/checkbox_checked.png");
 			uncheck = new Image("resources/image/Option/checkbox_unchecked.png");
 			check = check.getScaledCopy(50, 50);
@@ -316,7 +327,7 @@ public class OptionState extends BasicGameState {
 			LuffySurvival.p.setFullScreen(!LuffySurvival.p.isFullScreen());
 		}
 		if(positionX>230 && positionX<280 && positionY>298 && positionY<348 && input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){
-			LuffySurvival.p.setMusic(LuffySurvival.p.isMusic());
+			LuffySurvival.p.setMusic(!LuffySurvival.p.isMusic());
 		}
 
 	}

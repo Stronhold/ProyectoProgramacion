@@ -12,6 +12,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.MouseListener;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.GameState;
@@ -79,7 +80,16 @@ public class MainMenuState extends BasicGameState {
 	 */
 	private Button buttonCredits;
 
+	/**
+	 * Imagen
+	 */
 	private Image background;
+	
+	/**
+	 * Cancion
+	 */	
+	private Music song;
+	
 	/**
 	 * Constructor de MainMenuState
 	 * @param id el id del estado
@@ -96,17 +106,23 @@ public class MainMenuState extends BasicGameState {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		if(LuffySurvival.p.isMusic() == true){
+			song.loop();
+		}
 		gameContainer.getInput().addPrimaryListener(twlInputAdapter);
 	}
 
 	@Override
 	public void leave(final GameContainer gameContainer, final StateBasedGame sb) {
+		song.stop();
 		gameContainer.getInput().removeListener(twlInputAdapter);
+
 	}
 
 	@Override
 	public void init(GameContainer gameContainer, StateBasedGame sb)
 			throws SlickException {
+		song = new Music("resources/Music/Menu.ogg");
 		initGUI(gameContainer, sb);
 
 	}

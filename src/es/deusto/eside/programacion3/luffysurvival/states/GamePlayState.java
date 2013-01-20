@@ -17,6 +17,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
@@ -213,7 +214,7 @@ public class GamePlayState extends BasicGameState {
 	/**
 	 * Imagen de victoria
 	 */
-	private Image win;
+	private Image winImage;
 	/**
 	 * Tiempo que ha de pasar para ganar
 	 */
@@ -222,6 +223,8 @@ public class GamePlayState extends BasicGameState {
 	 * Indica si se ha terminado el juego
 	 */
 	private boolean endGame = false;
+	
+	private Music winSong, battle, lost;
 	/**
 	 * Constructor
 	 * 
@@ -234,11 +237,15 @@ public class GamePlayState extends BasicGameState {
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sb) throws SlickException {
+		battle = new Music("resources/Music/Fight.ogg");
+		winSong = new Music("resources/Music/Win.ogg");
+		lost = new Music("resources/Music/Lose.ogg");
+		initGUI(gc, sb);
 		timeGameOverMovement = 0;
 		initKeyListener(sb);
 		y = 0;
-		win = new Image("resources/image/win1.png");
-		win = win.getScaledCopy(640, 480);
+		winImage = new Image("resources/image/win1.png");
+		winImage = winImage.getScaledCopy(640, 480);
 		lastEnemy = ENEMY_PER_SECOND;
 		lastMovement = 0;
 		this.map = new TiledMap(MAP_LOCATION);
@@ -260,7 +267,16 @@ public class GamePlayState extends BasicGameState {
 	
 	@Override
 	public void enter(final GameContainer container, final StateBasedGame sb) {
+		if(LuffySurvival.p.isMusic() == true){
+			battle.loop();
+		}
 		isGameOver = false;
+	}
+	
+	@Override
+	public void leave(final GameContainer gc, final StateBasedGame sb){
+		winSong.stop();
+		lost.stop();
 	}
 
 	/**
@@ -635,7 +651,6 @@ public class GamePlayState extends BasicGameState {
 			throws SlickException {
 		this.map.render(0, 0);
 		list.draw();
-		// twlInputAdapter.render();
 		if (playerAdd) {
 			drawAreaCharacter(g);
 		}
@@ -654,6 +669,8 @@ public class GamePlayState extends BasicGameState {
 			gameOver.draw(CENTER,y);
 		}
 		if(timeGameOverMovement>=1000&& colorTrans<148){
+			battle.stop();
+			lost.loop();
 			Log.error("Tiempo" + timeGameOverMovement);
 			y+= 35;
 			colorTrans += 37;
@@ -666,8 +683,11 @@ public class GamePlayState extends BasicGameState {
 
 		}
 		
-		if(timeToWin >= 180000){
-			g.drawImage(win, 0, 0);
+		if(timeToWin >= 2000){
+			battle.stop();
+			
+			g.drawImage(winImage, 0, 0);
+			//lost.loop();
 			endGame = true;
 		}
 	}
@@ -739,9 +759,6 @@ public class GamePlayState extends BasicGameState {
 				return;
 			}
 		}
-		/*if (input.isKeyPressed(Input.KEY_ENTER)){
-			gc.pause();
-		}*/
 		timeMoneyUp += delta;
 		if(isGameOver == false)
 			timeToWin += delta;

@@ -29,6 +29,7 @@ import de.matthiasmann.twl.Widget;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 
 
+import es.deusto.eside.programacion3.luffysurvival.LuffySurvival;
 import es.deusto.eside.programacion3.luffysurvival.engine.FadeOutAnimation;
 import es.deusto.eside.programacion3.luffysurvival.language.Locale;
 /**
@@ -78,6 +79,12 @@ public class CreditState extends BasicGameState{
 	private UnicodeFont fpsFont;
 	
 	/**
+	 * Cancion
+	 */
+	private Music song;
+	
+	
+	/**
 	 * constructor del juego
 	 * @param ordinal numero de estado
 	 */
@@ -86,7 +93,7 @@ public class CreditState extends BasicGameState{
 	}
 
 	/**
-	 * devuelve el número de estado del juego
+	 * devuelve el numero de estado del juego
 	 */
 	public int getID() {
 		return this.stateID;
@@ -111,7 +118,7 @@ public class CreditState extends BasicGameState{
 		b = b.getScaledCopy(0.4f);
 		Image c = new Image("resources/image/Credit/law.png");
 		c = c.getScaledCopy(0.3f);
-		//this.right = new Animation();
+		song = new Music("resources/Music/Credit.ogg");
 		this.right.addFrame(a, 4000);
 		this.right.addFrame(b, 4000);
 		this.right.addFrame(c, 4000);
@@ -128,11 +135,11 @@ public class CreditState extends BasicGameState{
 	@Override
 	public void enter(final GameContainer container, final StateBasedGame sb) {
 		Input i = container.getInput();
-	//	song.play();
+		if(LuffySurvival.p.isMusic() == true){
+			song.loop();
+		}
 		keyListener = initKeyListener(sb);
 		i.addKeyListener(keyListener);
-	//	song.loop();
-
 	}
 	
 	@Override
@@ -140,7 +147,7 @@ public class CreditState extends BasicGameState{
 		Input i = container.getInput();
 		i.removeKeyListener(keyListener);
 		isFirstTime = true;
-	//	song.stop();
+		song.stop();
 		timer = 0;
 	}
 
